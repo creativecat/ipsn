@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematik Memory - 5. Klasse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .info-item {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-item span {
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 10px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid transparent;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card.flipped {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: perspective(1000px) rotateY(180deg);
+            border-color: #667eea;
+        }
+
+        .card.matched {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            cursor: default;
+            border-color: #4caf50;
+        }
+
+        .card-content {
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .card-symbol {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .instructions {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .instructions p {
+            color: #856404;
+            margin: 5px 0;
+        }
+
+        .congratulations {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .congratulations h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .congratulations p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .congratulations button {
+            background: white;
+            color: #4caf50;
+            border: 2px solid #4caf50;
+        }
+
+        .congratulations button:hover {
+            background: #f0f0f0;
+        }
+
+        .timer {
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card {
+                min-height: 100px;
+                padding: 15px;
+            }
+
+            .card-content {
+                font-size: 1em;
+            }
+
+            .card-symbol {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🧠 Mathematik Memory</h1>
+        <p class="subtitle">Lerne die mathematischen Begriffe der 5. Klasse</p>
+
+        <div class="instructions">
+            <h3>📚 Spielanleitung:</h3>
+            <p>Finde die passenden Paare: <strong>Begriff ↔ Definition/Beispiel</strong></p>
+            <p>Klicke auf zwei Karten, um sie umzudrehen. Wenn sie zusammenpassen, bleiben sie offen!</p>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-item">
+                <span id="moves">0</span> Züge
+            </div>
+            <div class="info-item">
+                <span id="pairs-found">0</span> Paare gefunden
+            </div>
+            <div class="info-item timer">
+                Zeit: <span id="time">0:00</span>
+            </div>
+        </div>
+
+        <div class="game-grid" id="game-grid">
+            <!-- Karten werden hier dynamisch eingefügt -->
+        </div>
+
+        <div class="controls">
+            <button id="restart-btn">🔄 Neustart</button>
+        </div>
+
+        <div class="congratulations" id="congratulations">
+            <h2>🎉 Herzlichen Glückwunsch!</h2>
+            <p>Du hast alle Paare gefunden!</p>
+            <p id="final-stats"></p>
+            <button id="play-again-btn">Nochmal spielen</button>
+        </div>
+    </div>
+
+    <script>
+        // Mathematik-Begriffe für die 5. Klasse
+        const mathTerms = [
+            { term: "Summe", definition: "Ergebnis einer Addition (z.B. 5 + 3 = 8)" },
+            { term: "Differenz", definition: "Ergebnis einer Subtraktion (z.B. 10 - 4 = 6)" },
+            { term: "Produkt", definition: "Ergebnis einer Multiplikation (z.B. 4 × 5 = 20)" },
+            { term: "Quotient", definition: "Ergebnis einer Division (z.B. 15 : 3 = 5)" },
+            { term: "Faktor", definition: "Zahl, die multipliziert wird (z.B. 4 × 5: 4 und 5 sind Faktoren)" },
+            { term: "Summand", definition: "Zahl, die addiert wird (z.B. 5 + 3: 5 und 3 sind Summanden)" },
+            { term: "Minuend", definition: "Zahl, von der subtrahiert wird (z.B. 10 - 4: 10 ist der Minuend)" },
+            { term: "Subtrahend", definition: "Zahl, die subtrahiert wird (z.B. 10 - 4: 4 ist der Subtrahend)" },
+            { term: "Dividend", definition: "Zahl, die geteilt wird (z.B. 15 : 3: 15 ist der Dividend)" },
+            { term: "Divisor", definition: "Zahl, durch die geteilt wird (z.B. 15 : 3: 3 ist der Divisor)" },
+            { term: "Addition", definition: "Rechenart: Zahlen werden addiert (+)" },
+            { term: "Subtraktion", definition: "Rechenart: Zahlen werden subtrahiert (-)" },
+            { term: "Multiplikation", definition: "Rechenart: Zahlen werden multipliziert (×)" },
+            { term: "Division", definition: "Rechenart: Zahlen werden dividiert (:)" },
+            { term: "Klammer", definition: "Zeichen, das die Rechenreihenfolge festlegt (z.B. (5 + 3) × 2)" },
+            { term: "Potenz", definition: "Mehrfache Multiplikation (z.B. 2³ = 2 × 2 × 2 = 8)" }
+        ];
+
+        // Spielvariablen
+        let cards = [];
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+        let moves = 0;
+        let pairsFound = 0;
+        let timerInterval;
+        let seconds = 0;
+        let gameStarted = false;
+
+        // DOM-Elemente
+        const gameGrid = document.getElementById('game-grid');
+        const movesDisplay = document.getElementById('moves');
+        const pairsDisplay = document.getElementById('pairs-found');
+        const timeDisplay = document.getElementById('time');
+        const restartBtn = document.getElementById('restart-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const congratulations = document.getElementById('congratulations');
+        const finalStats = document.getElementById('final-stats');
+
+        // Symbole für die Karten
+        const symbols = ['🔢', '➕', '➖', '✖️', '➗', '📊', '🧮', '📈', '🔍', '🎯', '✨', '💡', '📚', '🔥', '🌟', '🎲'];
+
+        // Spiel initialisieren
+        function initGame() {
+            // Vorheriges Spiel zurücksetzen
+            clearInterval(timerInterval);
+            seconds = 0;
+            moves = 0;
+            pairsFound = 0;
+            gameStarted = false;
+
+            movesDisplay.textContent = '0';
+            pairsDisplay.textContent = '0';
+            timeDisplay.textContent = '0:00';
+            congratulations.style.display = 'none';
+
+            // Karten erstellen
+            createCards();
+            
+            // Karten mischen
+            shuffleCards();
+            
+            // Karten anzeigen
+            renderCards();
+        }
+
+        // Karten erstellen
+        function createCards() {
+            cards = [];
+            
+            // Ausgewählte Begriffe (8 Paare für ein gutes Spiel)
+            const selectedTerms = mathTerms.slice(0, 8);
+            
+            // Für jedes Begriffs-Paar zwei Karten erstellen
+            selectedTerms.forEach((item, index) => {
+                cards.push({
+                    id: `term-${index}`,
+                    content: item.term,
+                    type: 'term',
+                    matched: false,
+                    symbol: symbols[index % symbols.length]
+                });
+                
+                cards.push({
+                    id: `def-${index}`,
+                    content: item.definition,
+                    type: 'definition',
+                    matched: false,
+                    symbol: symbols[index % symbols.length]
+                });
+            });
+        }
+
+        // Karten mischen (Fisher-Yates-Algorithmus)
+        function shuffleCards() {
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+        }
+
+        // Karten rendern
+        function renderCards() {
+            gameGrid.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.id = card.id;
+                cardElement.dataset.type = card.type;
+                
+                cardElement.innerHTML = `
+                    <div class="card-symbol">${card.symbol}</div>
+                    <div class="card-content">${card.content}</div>
+                `;
+                
+                if (card.matched) {
+                    cardElement.classList.add('matched');
+                }
+                
+                cardElement.addEventListener('click', flipCard);
+                gameGrid.appendChild(cardElement);
+            });
+        }
+
+        // Karte umdrehen
+        function flipCard() {
+            if (lockBoard || this.classList.contains('matched') || this.classList.contains('flipped')) {
+                return;
+            }
+
+            // Timer starten, wenn das Spiel beginnt
+            if (!gameStarted) {
+                startTimer();
+                gameStarted = true;
+            }
+
+            this.classList.add('flipped');
+            
+            if (!hasFlippedCard) {
+                // Erste Karte
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            // Zweite Karte
+            secondCard = this;
+            hasFlippedCard = false;
+            moves++;
+            movesDisplay.textContent = moves;
+
+            checkForMatch();
+        }
+
+        // Überprüfen, ob die Karten ein Paar bilden
+        function checkForMatch() {
+            const firstCardData = cards.find(c => c.id === firstCard.dataset.id);
+            const secondCardData = cards.find(c => c.id === secondCard.dataset.id);
+
+            // Prüfen, ob die Karten zusammengehören
+            // Eine Karte ist der Begriff, die andere die Definition
+            const firstIndex = parseInt(firstCard.dataset.id.split('-')[1]);
+            const secondIndex = parseInt(secondCard.dataset.id.split('-')[1]);
+
+            if (firstIndex === secondIndex && firstCard.dataset.type !== secondCard.dataset.type) {
+                // Match gefunden!
+                disableCards();
+                pairsFound++;
+                pairsDisplay.textContent = pairsFound;
+
+                // Überprüfen, ob alle Paare gefunden wurden
+                if (pairsFound === 8) {
+                    setTimeout(() => {
+                        endGame();
+                    }, 500);
+                }
+            } else {
+                // Kein Match - Karten zurückdrehen
+                unflipCards();
+            }
+        }
+
+        // Karten deaktivieren (als gefunden markieren)
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            
+            const firstCardData = cards.find(c => c.id === firstCard.dataset.id);
+            const secondCardData = cards.find(c => c.id === secondCard.dataset.id);
+            
+            if (firstCardData) firstCardData.matched = true;
+            if (secondCardData) secondCardData.matched = true;
+
+            resetBoard();
+        }
+
+        // Karten zurückdrehen
+        function unflipCards() {
+            lockBoard = true;
+            
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1000);
+        }
+
+        // Spielbrett zurücksetzen
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        // Timer starten
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timeDisplay.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            }, 1000);
+        }
+
+        // Spiel beenden
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const timeString = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            
+            finalStats.innerHTML = `
+                <strong>Zeit:</strong> ${timeString}<br>
+                <strong>Züge:</strong> ${moves}
+            `;
+            
+            congratulations.style.display = 'block';
+        }
+
+        // Event Listener
+        restartBtn.addEventListener('click', initGame);
+        playAgainBtn.addEventListener('click', () => {
+            congratulations.style.display = 'none';
+            initGame();
+        });
+
+        // Spiel starten
+        initGame();
+    </script>
+</body>
+</html>
