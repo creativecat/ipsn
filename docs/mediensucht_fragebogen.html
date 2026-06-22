@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragebogen: Mediensucht - Selbsttest für die 7. Klasse</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --light-gray: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+
+        .intro {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .intro h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            margin-bottom: 10px;
+        }
+
+        .question-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            color: var(--primary-color);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: #f9f9f9;
+            border-color: var(--secondary-color);
+        }
+
+        .option.selected {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .scale {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .scale span {
+            flex: 1;
+            text-align: center;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #prev-btn {
+            background-color: #999;
+            color: white;
+        }
+
+        #next-btn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        #submit-btn {
+            background-color: var(--success-color);
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            margin: 0 auto;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-header {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .result-score {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .result-feedback {
+            margin: 20px 0;
+            font-size: 1.1em;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .result-feedback.low {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .result-feedback.medium {
+            background-color: rgba(243, 156, 18, 0.1);
+            border: 1px solid var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .result-feedback.high {
+            background-color: rgba(39, 174, 96, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .tips {
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .tips h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .tips ul {
+            padding-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 10px;
+        }
+
+        .restart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background-color: #1a252f;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-screen h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        #start-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .question-counter {
+            text-align: right;
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .info-box {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        .info-box strong {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .result-score {
+                font-size: 2em;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 Mediensucht - Selbsttest</h1>
+            <p>Ein Fragebogen für Schülerinnen und Schüler der 7. Klasse</p>
+        </header>
+
+        <div id="start-screen" class="start-screen">
+            <div class="intro">
+                <h2>Willkommen zum Mediensucht-Selbsttest!</h2>
+                <p>
+                    Dieser Fragebogen hilft dir, dein eigenes Mediennutzungsverhalten zu reflektieren. 
+                    Beantworte die Fragen ehrlich - es gibt keine richtigen oder falschen Antworten.
+                </p>
+                <p>
+                    <strong>Dauer:</strong> ca. 5-10 Minuten<br>
+                    <strong>Ziel:</strong> Selbstreflexion und Bewusstsein schaffen
+                </p>
+            </div>
+            <button id="start-btn">Fragebogen starten</button>
+        </div>
+
+        <div id="quiz-screen">
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <div class="question-counter">
+                Frage <span id="current-question">1</span> von <span id="total-questions">15</span>
+            </div>
+
+            <div id="quiz-container">
+                <!-- Fragen werden hier dynamisch eingefügt -->
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn" disabled>Zurück</button>
+                <button id="next-btn" disabled>Weiter</button>
+                <button id="submit-btn" style="display: none;">Ergebnis anzeigen</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="result-container">
+            <div class="result-header">Dein Ergebnis 📊</div>
+            <div class="result-score" id="final-score">0/15</div>
+            <div class="result-feedback" id="result-feedback"></div>
+            
+            <div class="tips">
+                <h3>Tipps für einen gesunden Umgang mit Medien:</h3>
+                <ul id="tips-list">
+                    <!-- Tipps werden hier dynamisch eingefügt -->
+                </ul>
+            </div>
+            
+            <button class="restart-btn" id="restart-btn">Nochmal machen</button>
+        </div>
+    </div>
+
+    <script>
+        // Fragebogen-Daten (angepasst für 7. Klasse)
+        const quizData = [
+            {
+                question: "Wie viel Zeit verbringst du täglich mit digitalen Medien (Handy, Tablet, PC, Fernseher)?",
+                options: [
+                    "Weniger als 1 Stunde",
+                    "1-2 Stunden",
+                    "2-3 Stunden",
+                    "3-4 Stunden",
+                    "Mehr als 4 Stunden"
+                ],
+                weights: [0, 1, 2, 3, 4], // Gewichtung für die Auswertung
+                category: "zeit"
+            },
+            {
+                question: "Fällst du in der Schule oder bei den Hausaufgaben oft ab, weil du auf dein Handy schaust?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "konzentration"
+            },
+            {
+                question: "Fühlst du dich unruhig oder gestresst, wenn du dein Handy nicht bei dir hast?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "abhaengigkeit"
+            },
+            {
+                question: "Vernachlässigst du Hobbys oder Treffen mit Freunden, weil du lieber digitale Medien nutzt?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "soziales"
+            },
+            {
+                question: "Schläfst du weniger, weil du abends noch lange am Handy oder PC bist?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "schlaf"
+            },
+            {
+                question: "Versuchst du, deine Mediennutzung zu reduzieren, schaffst es aber nicht?",
+                options: [
+                    "Nie versucht",
+                    "Versucht und geschafft",
+                    "Versucht, aber nicht geschafft",
+                    "Oft versucht, aber gescheitert",
+                    "Ich kann nicht aufhören"
+                ],
+                weights: [0, 0, 2, 3, 4],
+                category: "kontrolle"
+            },
+            {
+                question: "Nutzt du digitale Medien, um unangenehme Gefühle (z.B. Langeweile, Traurigkeit, Stress) zu verdrängen?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "emotionen"
+            },
+            {
+                question: "Wie oft checkst du dein Handy, ohne dass es geklingelt oder vibriert hat?",
+                options: [
+                    "Nie",
+                    "1-2 Mal am Tag",
+                    "Alle paar Stunden",
+                    "Alle 30 Minuten",
+                    "Ständig"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "nutzung"
+            },
+            {
+                question: "Fühlst du dich schuldig, weil du zu viel Zeit mit digitalen Medien verbringst?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "gefuehle"
+            },
+            {
+                question: "Nutzt du digitale Medien, während du isst?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "alltag"
+            },
+            {
+                question: "Hast du schon einmal gelogen, wie viel Zeit du mit digitalen Medien verbringst?",
+                options: [
+                    "Nie",
+                    "Einmal",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "ehrlichkeit"
+            },
+            {
+                question: "Beeinträchtigt deine Mediennutzung deine schulischen Leistungen?",
+                options: [
+                    "Nein, überhaupt nicht",
+                    "Ein bisschen",
+                    "Ja, manchmal",
+                    "Ja, oft",
+                    "Ja, stark"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "schule"
+            },
+            {
+                question: "Fühlst du dich ohne digitale Medien isoliert oder ausgeschlossen?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "soziales"
+            },
+            {
+                question: "Wie oft nutzt du digitale Medien in der Schule, obwohl es nicht erlaubt ist?",
+                options: [
+                    "Nie",
+                    "Selten",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "schule"
+            },
+            {
+                question: "Hast du schon einmal versucht, eine bestimmte App oder ein Spiel zu löschen, aber dann wieder installiert?",
+                options: [
+                    "Nie",
+                    "Einmal",
+                    "Manchmal",
+                    "Oft",
+                    "Immer"
+                ],
+                weights: [0, 1, 2, 3, 4],
+                category: "kontrolle"
+            }
+        ];
+
+        // Tipps für verschiedene Punktbereiche
+        const tipsByScore = {
+            low: [
+                "✅ Du hast einen gesunden Umgang mit digitalen Medien! So bleibt es hoffentlich.",
+                "📱 Nutze digitale Medien bewusst und in Maßen.",
+                "⏰ Plane feste Zeiten für Mediennutzung ein und halte dich daran.",
+                "🎯 Setze dir klare Ziele, z.B. 'Ich nutze mein Handy nur nach den Hausaufgaben'.",
+                "📵 Probiere aus, eine Stunde am Tag komplett ohne digitale Medien auszukommen."
+            ],
+            medium: [
+                "⚠️ Achte darauf, dass deine Mediennutzung nicht zu viel Raum einnimmt.",
+                "🕒 Begrenze die Zeit, die du mit digitalen Medien verbringst.",
+                "📴 Schalte Benachrichtigungen aus, um nicht ständig abgelenkt zu werden.",
+                "🏃‍♂️ Suche dir Hobbys, die nicht mit digitalen Medien zu tun haben.",
+                "💬 Sprich mit Freunden oder Familie über deine Mediennutzung.",
+                "📅 Erstelle einen Mediennutzungsplan für die Woche."
+            ],
+            high: [
+                "🚨 Deine Mediennutzung könnte problematisch sein. Es ist wichtig, etwas zu ändern.",
+                "🚫 Versuche, feste 'medienfreie Zeiten' einzuführen (z.B. beim Essen oder vor dem Schlafengehen).",
+                "📵 Lege dein Handy in einem anderen Raum ab, wenn du lernst oder schläfst.",
+                "💬 Suche das Gespräch mit einer Vertrauensperson (Eltern, Lehrer, Schulsozialarbeit).",
+                "📖 Informiere dich über die Auswirkungen von zu viel Medienkonsum.",
+                "🎯 Setze dir kleine, erreichbare Ziele (z.B. 'Heute nur 2 Stunden Handy').",
+                "📞 Es gibt Hilfsangebote wie die 'Nummer gegen Kummer' (116 111) für Kinder und Jugendliche."
+            ]
+        };
+
+        // DOM-Elemente
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultFeedbackEl = document.getElementById('result-feedback');
+        const tipsListEl = document.getElementById('tips-list');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Quiz-Zustand
+        let currentQuestion = 0;
+        let userAnswers = Array(quizData.length).fill(null);
+
+        // Quiz starten
+        startBtn.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            resultScreen.classList.remove('active');
+            
+            currentQuestion = 0;
+            userAnswers = Array(quizData.length).fill(null);
+            
+            loadQuestion();
+            updateProgress();
+        }
+
+        // Frage laden
+        function loadQuestion() {
+            const questionData = quizData[currentQuestion];
+            
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <h3>${questionData.question}</h3>
+                    <div class="options">
+                        ${questionData.options.map((option, index) => `
+                            <label class="option ${userAnswers[currentQuestion] === index ? 'selected' : ''}">
+                                <input type="radio" name="answer" value="${index}" 
+                                    ${userAnswers[currentQuestion] === index ? 'checked' : ''}>
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Event-Listener für Optionen hinzufügen
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const selectedIndex = parseInt(radio.value);
+                    selectOption(selectedIndex);
+                });
+            });
+
+            // Navigation aktualisieren
+            updateNavigation();
+            updateQuestionCounter();
+        }
+
+        // Option auswählen
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+            loadQuestion(); // Lade die Frage neu, um die Auswahl anzuzeigen
+            updateNavigation();
+            updateProgress();
+        }
+
+        // Navigation aktualisieren
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (userAnswers[currentQuestion] !== null) {
+                nextBtn.disabled = false;
+                if (currentQuestion === quizData.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+            } else {
+                nextBtn.disabled = true;
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Fortschrittsbalken aktualisieren
+        function updateProgress() {
+            const answeredQuestions = userAnswers.filter(answer => answer !== null).length;
+            const progress = (answeredQuestions / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Fragenzähler aktualisieren
+        function updateQuestionCounter() {
+            currentQuestionEl.textContent = currentQuestion + 1;
+            totalQuestionsEl.textContent = quizData.length;
+        }
+
+        // Zur vorherigen Frage
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+
+        // Zur nächsten Frage
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1 && userAnswers[currentQuestion] !== null) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        });
+
+        // Ergebnis anzeigen
+        submitBtn.addEventListener('click', showResults);
+
+        function showResults() {
+            // Berechne die Gesamtpunktzahl
+            let totalScore = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    totalScore += quizData[index].weights[answer];
+                }
+            });
+
+            // Berechne den Durchschnitt
+            const averageScore = totalScore / quizData.length;
+            
+            quizScreen.style.display = 'none';
+            resultScreen.classList.add('active');
+            
+            finalScoreEl.textContent = `${Math.round(averageScore * 10) / 10}/4`;
+            
+            // Feedback und Tipps basierend auf der Punktzahl
+            let feedback = '';
+            let feedbackClass = '';
+            let tips = [];
+            
+            if (averageScore < 1.5) {
+                feedback = "😊 Deine Mediennutzung ist im grünen Bereich! Du hast einen gesunden Umgang mit digitalen Medien.";
+                feedbackClass = 'high';
+                tips = tipsByScore.low;
+            } else if (averageScore < 2.5) {
+                feedback = "⚠️ Deine Mediennutzung ist etwas erhöht. Achte darauf, dass sie nicht zu viel Raum einnimmt.";
+                feedbackClass = 'medium';
+                tips = tipsByScore.medium;
+            } else {
+                feedback = "🚨 Deine Mediennutzung könnte problematisch sein. Es wäre gut, wenn du etwas änderst.";
+                feedbackClass = 'low';
+                tips = tipsByScore.high;
+            }
+            
+            resultFeedbackEl.textContent = feedback;
+            resultFeedbackEl.className = `result-feedback ${feedbackClass}`;
+            
+            // Tipps anzeigen
+            tipsListEl.innerHTML = '';
+            tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.innerHTML = tip;
+                tipsListEl.appendChild(li);
+            });
+        }
+
+        // Nochmal machen
+        restartBtn.addEventListener('click', startQuiz);
+
+        // Initialisierung
+        function init() {
+            quizScreen.style.display = 'none';
+            resultScreen.classList.remove('active');
+            startScreen.style.display = 'block';
+        }
+
+        // Seite laden
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
