@@ -111,11 +111,11 @@
 
         .card-front {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 100%;
             height: 100%;
+            font-size: 3em;
         }
 
         .card-back {
@@ -133,19 +133,16 @@
             align-items: center;
             width: 100%;
             height: 100%;
-        }
-
-        .card-symbol {
-            font-size: 2.5em;
-            margin-bottom: 5px;
+            padding: 10px;
         }
 
         .card-content {
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: bold;
             text-align: center;
             word-break: break-word;
-            padding: 0 10px;
+            width: 100%;
+            line-height: 1.3;
         }
 
         .controls {
@@ -249,11 +246,7 @@
             }
 
             .card-content {
-                font-size: 0.85em;
-            }
-
-            .card-symbol {
-                font-size: 2em;
+                font-size: 0.8em;
             }
         }
 
@@ -304,16 +297,16 @@
     </div>
 
     <script>
-        // Mathematik-Begriffe für die 5. Klasse mit passenden Symbolen
+        // Mathematik-Begriffe für die 5. Klasse
         const mathTerms = [
-            { term: "Summe", definition: "Ergebnis einer Addition (z.B. 5 + 3 = 8)", symbol: "➕" },
-            { term: "Differenz", definition: "Ergebnis einer Subtraktion (z.B. 10 - 4 = 6)", symbol: "➖" },
-            { term: "Produkt", definition: "Ergebnis einer Multiplikation (z.B. 4 × 5 = 20)", symbol: "✖️" },
-            { term: "Quotient", definition: "Ergebnis einer Division (z.B. 15 : 3 = 5)", symbol: "➗" },
-            { term: "Faktor", definition: "Zahl, die multipliziert wird (z.B. 4 × 5: 4 und 5 sind Faktoren)", symbol: "🔢" },
-            { term: "Summand", definition: "Zahl, die addiert wird (z.B. 5 + 3: 5 und 3 sind Summanden)", symbol: "🔢" },
-            { term: "Minuend", definition: "Zahl, von der subtrahiert wird (z.B. 10 - 4: 10 ist der Minuend)", symbol: "🔢" },
-            { term: "Subtrahend", definition: "Zahl, die subtrahiert wird (z.B. 10 - 4: 4 ist der Subtrahend)", symbol: "🔢" }
+            { term: "Summe", definition: "Ergebnis einer Addition (z.B. 5 + 3 = 8)" },
+            { term: "Differenz", definition: "Ergebnis einer Subtraktion (z.B. 10 - 4 = 6)" },
+            { term: "Produkt", definition: "Ergebnis einer Multiplikation (z.B. 4 × 5 = 20)" },
+            { term: "Quotient", definition: "Ergebnis einer Division (z.B. 15 : 3 = 5)" },
+            { term: "Faktor", definition: "Zahl, die multipliziert wird (z.B. 4 × 5: 4 und 5 sind Faktoren)" },
+            { term: "Summand", definition: "Zahl, die addiert wird (z.B. 5 + 3: 5 und 3 sind Summanden)" },
+            { term: "Minuend", definition: "Zahl, von der subtrahiert wird (z.B. 10 - 4: 10 ist der Minuend)" },
+            { term: "Subtrahend", definition: "Zahl, die subtrahiert wird (z.B. 10 - 4: 4 ist der Subtrahend)" }
         ];
 
         // Spielvariablen
@@ -371,16 +364,14 @@
                     id: `term-${index}`,
                     content: item.term,
                     type: 'term',
-                    matched: false,
-                    symbol: item.symbol
+                    matched: false
                 });
                 
                 cards.push({
                     id: `def-${index}`,
                     content: item.definition,
                     type: 'definition',
-                    matched: false,
-                    symbol: item.symbol
+                    matched: false
                 });
             });
         }
@@ -405,10 +396,9 @@
                 
                 cardElement.innerHTML = `
                     <div class="card-front">
-                        <div class="card-symbol">${card.symbol}</div>
+                        🔳
                     </div>
                     <div class="card-back">
-                        <div class="card-symbol">${card.symbol}</div>
                         <div class="card-content">${card.content}</div>
                     </div>
                 `;
