@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktives Nürnberg-Quiz</title>
+    <style>
+        :root {
+            --primary-color: #d42426;
+            --secondary-color: #ffcc00;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --correct-color: #4CAF50;
+            --incorrect-color: #f44336;
+            --neutral-color: #2196F3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question h2 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+        }
+
+        .option:hover {
+            background-color: #f9f9f9;
+            border-color: var(--primary-color);
+        }
+
+        .option.selected {
+            border-color: var(--neutral-color);
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .option.correct {
+            background-color: rgba(76, 175, 80, 0.2);
+            border-color: var(--correct-color);
+            color: var(--correct-color);
+        }
+
+        .option.incorrect {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-color: var(--incorrect-color);
+            color: var(--incorrect-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #prev-btn {
+            background-color: #999;
+            color: white;
+        }
+
+        #next-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #submit-btn {
+            background-color: var(--secondary-color);
+            color: #333;
+            font-size: 1.1em;
+            padding: 15px 30px;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-header {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .result-correct {
+            color: var(--correct-color);
+        }
+
+        .result-incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .result-feedback {
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+
+        .restart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background-color: #b01e20;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 5px;
+            font-style: italic;
+            display: none;
+        }
+
+        .explanation.active {
+            display: block;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        #start-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            background-color: #b01e20;
+        }
+
+        .question-counter {
+            text-align: right;
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .result-score {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏰 Nürnberg-Quiz</h1>
+            <p>Teste dein Wissen über die schöne Stadt Nürnberg!</p>
+        </header>
+
+        <div id="start-screen" class="start-screen">
+            <h2>Willkommen beim Nürnberg-Quiz!</h2>
+            <p>Dieses Quiz enthält 10 Fragen über Geschichte, Kultur und Sehenswürdigkeiten von Nürnberg.</p>
+            <p>Wähle die richtige Antwort aus und erhalte sofort Feedback!</p>
+            <button id="start-btn">Quiz starten</button>
+        </div>
+
+        <div id="quiz-screen">
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <div class="question-counter">
+                Frage <span id="current-question">1</span> von <span id="total-questions">10</span>
+            </div>
+
+            <div id="quiz-container">
+                <!-- Fragen werden hier dynamisch eingefügt -->
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn" disabled>Zurück</button>
+                <button id="next-btn" disabled>Weiter</button>
+                <button id="submit-btn" style="display: none;">Ergebnis anzeigen</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="result-container">
+            <div class="result-header">Quiz abgeschlossen! 🎉</div>
+            <div class="result-score" id="final-score">0/10</div>
+            <div class="result-feedback" id="result-feedback"></div>
+            <button class="restart-btn" id="restart-btn">Nochmal spielen</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz-Daten über Nürnberg
+        const quizData = [
+            {
+                question: "Welcher Fluss fließt durch Nürnberg?",
+                options: ["Donau", "Main", "Pegnitz", "Isar"],
+                correct: 2,
+                explanation: "Die Pegnitz ist der Hauptfluss, der durch Nürnberg fließt. Sie entspringt in der Fränkischen Schweiz und mündet später in die Regnitz."
+            },
+            {
+                question: "Welche berühmte Burg thront über der Altstadt von Nürnberg?",
+                options: ["Burg Hohenzollern", "Kaiserburg Nürnberg", "Burg Frankenstein", "Burg Eltz"],
+                correct: 1,
+                explanation: "Die Kaiserburg Nürnberg ist eine der bekanntesten Burgen Deutschlands und war eine wichtige Kaiserpfalz des Heiligen Römischen Reiches."
+            },
+            {
+                question: "Welches traditionelle Nürnberger Gebäck ist weltweit bekannt?",
+                options: ["Lebkuchen", "Stollen", "Brezeln", "Printen"],
+                correct: 0,
+                explanation: "Nürnberger Lebkuchen sind seit dem Mittelalter bekannt und werden besonders zur Weihnachtszeit geschätzt. Nürnberg ist die 'Lebkuchenstadt'."
+            },
+            {
+                question: "In welchem Jahr fand der berühmte 'Reichstag zu Nürnberg' statt, der die Goldene Bulle bestätigte?",
+                options: ["1234", "1356", "1485", "1521"],
+                correct: 1,
+                explanation: "Die Goldene Bulle wurde 1356 auf dem Reichstag zu Nürnberg bestätigt. Sie war eine der wichtigsten Verfassungen des Heiligen Römischen Reiches."
+            },
+            {
+                question: "Welcher berühmte Künstler und Erfinder lebte und arbeitete in Nürnberg?",
+                options: ["Leonardo da Vinci", "Albrecht Dürer", "Michelangelo", "Raffael"],
+                correct: 1,
+                explanation: "Albrecht Dürer (1471-1528) war einer der bedeutendsten Künstler der Renaissance und lebte in Nürnberg. Sein Haus in der Altstadt kann noch heute besichtigt werden."
+            },
+            {
+                question: "Welches Museum in Nürnberg ist dem Frieden gewidmet?",
+                options: ["Germanisches Nationalmuseum", "Dokumentationszentrum Reichsparteitagsgelände", "Neues Museum Nürnberg", "Museum Tucherschloss"],
+                correct: 1,
+                explanation: "Das Dokumentationszentrum Reichsparteitagsgelände beschäftigt sich mit der NS-Geschichte und der Bedeutung von Frieden und Menschenrechten."
+            },
+            {
+                question: "Welche berühmte Weihnachtsdekoration stammt aus Nürnberg?",
+                options: ["Christbaumkugeln", "Weihnachtsstern", "Schneekugel", "Weihnachtsmann-Figur"],
+                correct: 0,
+                explanation: "Die Christbaumkugel wurde in Nürnberg erfunden. Die erste dokumentierte Herstellung von Glas-Christbaumkugeln begann hier im 19. Jahrhundert."
+            },
+            {
+                question: "Welcher berühmte Platz in Nürnberg ist bekannt für seinen Schönen Brunnen?",
+                options: ["Hauptmarkt", "Königstor", "Lorenzplatz", "Weißgerbergasse"],
+                correct: 0,
+                explanation: "Der Schöne Brunnen steht auf dem Hauptmarkt in Nürnberg. Er wurde 1385-1396 erbaut und ist ein Meisterwerk der Gotik."
+            },
+            {
+                question: "Welche Universität hat ihren Hauptsitz in Nürnberg?",
+                options: ["Technische Universität München", "Friedrich-Alexander-Universität Erlangen-Nürnberg", "Universität Bayreuth", "Universität Regensburg"],
+                correct: 1,
+                explanation: "Die Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) hat Standorte in Erlangen und Nürnberg und ist eine der größten Universitäten Deutschlands."
+            },
+            {
+                question: "Welches Tier ist im Wappen von Nürnberg abgebildet?",
+                options: ["Löwe", "Adler", "Reichsadler", "Bär"],
+                correct: 2,
+                explanation: "Das Wappen von Nürnberg zeigt den Reichadler, der auf die Bedeutung der Stadt als Reichsstadt des Heiligen Römischen Reiches hinweist."
+            }
+        ];
+
+        // DOM-Elemente
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultFeedbackEl = document.getElementById('result-feedback');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Quiz-Zustand
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = Array(quizData.length).fill(null);
+        let questionsAnswered = 0;
+
+        // Quiz starten
+        startBtn.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            resultScreen.classList.remove('active');
+            
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = Array(quizData.length).fill(null);
+            questionsAnswered = 0;
+            
+            loadQuestion();
+            updateProgress();
+        }
+
+        // Frage laden
+        function loadQuestion() {
+            const questionData = quizData[currentQuestion];
+            
+            // Frage und Optionen anzeigen
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <h2>${questionData.question}</h2>
+                    <div class="options">
+                        ${questionData.options.map((option, index) => `
+                            <div class="option ${getOptionClass(index)}" data-index="${index}">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation ${userAnswers[currentQuestion] !== null ? 'active' : ''}">
+                        ${questionData.explanation}
+                    </div>
+                </div>
+            `;
+
+            // Event-Listener für Optionen hinzufügen
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => {
+                    if (userAnswers[currentQuestion] !== null && !prevBtn.disabled) return;
+                    
+                    const selectedIndex = parseInt(option.dataset.index);
+                    selectOption(selectedIndex);
+                });
+            });
+
+            // Navigation aktualisieren
+            updateNavigation();
+            updateQuestionCounter();
+        }
+
+        // Option auswählen
+        function selectOption(index) {
+            const questionData = quizData[currentQuestion];
+            const isCorrect = index === questionData.correct;
+            
+            // Antwort speichern
+            userAnswers[currentQuestion] = index;
+            
+            if (isCorrect) {
+                score++;
+            }
+
+            // Optionen aktualisieren
+            document.querySelectorAll('.option').forEach((option, i) => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+                
+                if (i === index) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else if (i === questionData.correct) {
+                    option.classList.add('correct');
+                }
+            });
+
+            // Erklärung anzeigen
+            document.querySelector('.explanation').classList.add('active');
+            
+            questionsAnswered++;
+            updateNavigation();
+            updateProgress();
+        }
+
+        // Navigation aktualisieren
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (userAnswers[currentQuestion] !== null) {
+                nextBtn.disabled = false;
+                if (currentQuestion === quizData.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+            } else {
+                nextBtn.disabled = true;
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Fortschrittsbalken aktualisieren
+        function updateProgress() {
+            const progress = ((currentQuestion + (userAnswers[currentQuestion] !== null ? 1 : 0)) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            updateQuestionCounter();
+        }
+
+        // Fragenzähler aktualisieren
+        function updateQuestionCounter() {
+            currentQuestionEl.textContent = currentQuestion + 1;
+            totalQuestionsEl.textContent = quizData.length;
+        }
+
+        // Option-Klasse bestimmen
+        function getOptionClass(index) {
+            if (userAnswers[currentQuestion] === null) return '';
+            
+            const questionData = quizData[currentQuestion];
+            const selectedIndex = userAnswers[currentQuestion];
+            
+            if (index === selectedIndex) {
+                return index === questionData.correct ? 'correct' : 'incorrect';
+            } else if (index === questionData.correct) {
+                return 'correct';
+            }
+            return '';
+        }
+
+        // Zur vorherigen Frage
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+
+        // Zur nächsten Frage
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1 && userAnswers[currentQuestion] !== null) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        });
+
+        // Ergebnis anzeigen
+        submitBtn.addEventListener('click', showResults);
+
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultScreen.classList.add('active');
+            
+            finalScoreEl.textContent = `${score}/${quizData.length}`;
+            
+            // Feedback basierend auf der Punktzahl
+            const percentage = (score / quizData.length) * 100;
+            let feedback = '';
+            
+            if (percentage === 100) {
+                feedback = "🌟 Perfekt! Du bist ein echter Nürnberg-Experte! 🎉";
+            } else if (percentage >= 80) {
+                feedback = "👏 Sehr gut! Du kennst dich wirklich gut in Nürnberg aus! 😊";
+            } else if (percentage >= 60) {
+                feedback = "😃 Gut gemacht! Du hast ein solides Wissen über Nürnberg. 👍";
+            } else if (percentage >= 40) {
+                feedback = "🤔 Nicht schlecht! Aber es gibt noch viel über Nürnberg zu lernen. 📚";
+            } else {
+                feedback = "😅 Übe ein bisschen mehr! Nürnberg hat so viel zu bieten. 🏰";
+            }
+            
+            resultFeedbackEl.textContent = feedback;
+        }
+
+        // Nochmal spielen
+        restartBtn.addEventListener('click', startQuiz);
+
+        // Initialisierung
+        function init() {
+            quizScreen.style.display = 'none';
+            resultScreen.classList.remove('active');
+            startScreen.style.display = 'block';
+        }
+
+        // Seite laden
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
