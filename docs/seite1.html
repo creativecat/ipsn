@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V2 - KI-gestützte Webentwicklung: Interaktive Websites in Minuten erstellen</title>
+    <title>V3 - KI-gestützte Webentwicklung</title>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.min.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.4.0/dist/reveal.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.4.0/dist/theme/black.min.css">
     
     <style>
         .moderator-container {
@@ -201,6 +201,9 @@
         
         .reveal {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
         
         .reveal h1, .reveal h2, .reveal h3 {
@@ -211,6 +214,7 @@
         .reveal section {
             padding: 40px;
             text-align: center;
+            height: 100%;
         }
         
         .reveal .fragment {
@@ -283,24 +287,6 @@
             transform: translateY(-5px);
         }
         
-        .sync-hint {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(79, 195, 247, 0.9);
-            color: #1a1a1a;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            z-index: 100;
-            animation: fadeIn 1s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         .keyboard-hint {
             position: fixed;
             bottom: 20px;
@@ -325,6 +311,16 @@
                 flex-direction: column;
                 align-items: center;
             }
+        }
+        
+        /* Fix für Reveal.js - Stelle sicher, dass der Reveal-Container sichtbar ist */
+        .reveal {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .slides {
+            display: block !important;
         }
     </style>
 </head>
@@ -379,7 +375,7 @@
             <h3>ℹ️ Informationen</h3>
             <p><strong>Synchronisationsstatus:</strong> <span id="syncStatus">✅ Verbunden</span></p>
             <p><strong>Letzte Aktualisierung:</strong> <span id="lastUpdate">-</span></p>
-            <p><strong>Tipp:</strong> Drücke <strong>M</strong> für Moderatorenansicht. Präsentation öffnet sich in neuem Tab.</p>
+            <p><strong>Tipp:</strong> Drücke <strong>M</strong> für Moderatorenansicht.</p>
         </div>
     </div>
 
@@ -448,9 +444,8 @@
                 </div>
                 <div class="fragment">
                     <p style="font-size: 1.2em; margin-top: 20px;"><strong>KI-Prompt:</strong></p>
-                    <p style="font-size: 0.95em; color: #bbb;">"Erstelle ein HTML/JS/CSS-Quiz mit 5 Fragen, das den Score in localStorage speichert."</p>
+                    <p style="font-size: 0.95em; color: #bbb;">"Erstelle ein HTML/JS/CSS-Quiz mit 5 Fragen."</p>
                 </div>
-                <a href="#" class="example-button fragment">Live-Demo anzeigen</a>
             </section>
 
             <section>
@@ -466,9 +461,8 @@
                 </div>
                 <div class="fragment">
                     <p style="font-size: 1.2em; margin-top: 20px;"><strong>Technische Highlights:</strong></p>
-                    <p><code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">BroadcastChannel</code> für Synchronisation | <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">Canvas 2D Context</code> für Zeichnungen</p>
+                    <p>BroadcastChannel | Canvas 2D Context</p>
                 </div>
-                <a href="#" class="example-button fragment">Live-Demo anzeigen</a>
             </section>
 
             <section>
@@ -488,7 +482,6 @@
 backface-visibility: hidden;
 transition: transform 0.6s;</code></pre>
                 </div>
-                <a href="#" class="example-button fragment">Live-Demo anzeigen</a>
             </section>
 
             <section>
@@ -536,57 +529,25 @@ transition: transform 0.6s;</code></pre>
                         <li>KI kann Code generieren – Sie steuern das Design</li>
                         <li>Lokale Speicher ermöglichen komplexe Funktionen ohne Backend</li>
                         <li>Synchronisation zwischen Tabs ist mit Browser-APIs möglich</li>
-                        <li>GitHub Pages ist die einfachste Methode zum Hosting</li>
                     </ul>
                 </div>
                 <div class="fragment">
                     <p style="font-size: 1.3em; margin-top: 20px;"><strong>Nächste Schritte:</strong></p>
-                    <p>Probieren Sie es aus! Beginnen Sie mit einem einfachen Projekt.</p>
+                    <p>Probieren Sie es aus!</p>
                 </div>
                 <div class="fragment" style="margin-top: 30px;">
-                    <p style="font-size: 1.5em; color: #4fc3f7;"><strong>🚀 Viel Erfolg beim Entwickeln!</strong></p>
+                    <p style="font-size: 1.5em; color: #4fc3f7;"><strong>🚀 Viel Erfolg!</strong></p>
                 </div>
             </section>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.4.0/dist/reveal.min.js"></script>
     
     <script>
-        const SLIDE_NOTES = [
-            "Herzlich willkommen! Stellen Sie sich vor: Sie beschreiben in einfachen Worten, was Ihre Website können soll – und die KI generiert den Code. Heute sehen wir, wie das funktioniert und was möglich ist.\n\nTipp: Drücken Sie M für die Moderatorenansicht.",
-            "Betonen: KI ersetzt nicht das Verständnis, sondern beschleunigt den Prozess. Beispiel: Statt stundenlang nach CSS-Animationen zu suchen, generiert die KI sie direkt.\n\nFrage an das Publikum: Wer hat schon mal mit KI-Tools experimentiert?",
-            "Wichtig: Alle Beispiele heute laufen komplett im Browser – kein Server nötig! Das macht sie perfekt für den Unterrichtseinsatz.\n\nHinweis: Alle Technologien sind Standard-Web-APIs, die in jedem modernen Browser funktionieren.",
-            "Demo-Idee: Zeigen Sie, wie Sie die KI auffordern, den Code zu generieren. Dann die generierte Datei öffnen und das Quiz ausprobieren.\n\nBetonen: Der Code ist direkt lauffähig und kann angepasst werden.\n\nTechnischer Hinweis: localStorage speichert Daten pro Domain und Browser.",
-            "Wichtig: Die Synchronisation funktioniert nur zwischen Tabs desselben Browsers. Perfekt für den Unterricht: Lehrkraft und Schüler:innen können gemeinsam zeichnen.\n\nLive-Demo: Öffnen Sie das Whiteboard in zwei Tabs und zeichnen Sie in beiden gleichzeitig.",
-            "Praxistipp: Lehrkräfte können Karteikarten für ihre Klasse erstellen. Schüler:innen nutzen sie zum Lernen – der Fortschritt wird lokal gespeichert.\n\nCSS-Tipp: Die 3D-Flip-Animation nutzt transform-style: preserve-3d und backface-visibility.",
-            "Betonen: Der KI-generierte Code ist ein STARTpunkt, kein Endprodukt. Wichtig ist, den Code zu verstehen und anzupassen.\n\nDiskussion: Wo sehen Sie Grenzen oder Herausforderungen bei der Nutzung von KI?",
-            "Live-Demo: Zeigen Sie, wie Sie eine einfache HTML-Datei auf GitHub hochladen. Innerhalb von 1-2 Minuten ist die Website online.\n\nTipp: GitHub Pages unterstützt auch benutzerdefinierte Domains.",
-            "Zusammenfassung: KI ist ein mächtiges Werkzeug, das den Einstieg erleichtert. Aber das Verständnis der Technologien bleibt entscheidend.\n\nFragen? Diskussion!\n\nAusblick: In zukünftigen Sessions können wir vertiefende Themen behandeln."
-        ];
-
-        const SLIDE_TITLES = [
-            "Titel: KI-gestützte Webentwicklung",
-            "Einführung: Warum KI für Webentwicklung?",
-            "Technologien: Die Bausteine unserer Beispiele",
-            "Beispiel 1: Interaktives Quiz mit localStorage",
-            "Beispiel 2: Kollaboratives Whiteboard mit BroadcastChannel",
-            "Beispiel 3: Digitale Notizkarten mit IndexedDB",
-            "Workflow: Von der Idee zur Website mit KI",
-            "Deployment: Website auf GitHub Pages hosten",
-            "Fazit & Ausblick: Nächste Schritte"
-        ];
-
-        // Timer-Variablen
-        let totalSeconds = 0;
-        let slideSeconds = 0;
-        let totalTimerInterval;
-        let slideTimerInterval;
-        let isTotalTimerRunning = false;
-        let isSlideTimerRunning = false;
-
+        // Warte auf DOM und Reveal.js
         document.addEventListener('DOMContentLoaded', function() {
-            // Datum setzen
+            // Setze Datum
             const now = new Date();
             const dateString = now.toLocaleDateString('de-DE', {
                 weekday: 'long',
@@ -605,9 +566,59 @@ transition: transform 0.6s;</code></pre>
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Prüfen, ob Moderatorenansicht
+            // Prüfe, ob Moderatorenansicht
             const urlParams = new URLSearchParams(window.location.search);
             const isModerator = urlParams.get('moderator') === 'true';
+
+            // Timer-Variablen
+            let totalSeconds = 0;
+            let slideSeconds = 0;
+            let totalTimerInterval;
+            let slideTimerInterval;
+
+            function formatTime(seconds) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                return [hours, minutes, secs].map(x => x.toString().padStart(2, '0')).join(':');
+            }
+
+            function startTotalTimer() {
+                if (totalTimerInterval) clearInterval(totalTimerInterval);
+                totalTimerInterval = setInterval(() => {
+                    totalSeconds++;
+                    const timerEl = document.getElementById('totalTimer');
+                    if (timerEl) timerEl.textContent = formatTime(totalSeconds);
+                }, 1000);
+            }
+
+            function resetTotalTimer() {
+                totalSeconds = 0;
+                const timerEl = document.getElementById('totalTimer');
+                if (timerEl) timerEl.textContent = formatTime(totalSeconds);
+            }
+
+            function startSlideTimer() {
+                if (slideTimerInterval) clearInterval(slideTimerInterval);
+                slideTimerInterval = setInterval(() => {
+                    slideSeconds++;
+                    const timerEl = document.getElementById('slideTimer');
+                    if (timerEl) timerEl.textContent = formatTime(slideSeconds);
+                }, 1000);
+            }
+
+            function resetSlideTimer() {
+                slideSeconds = 0;
+                const timerEl = document.getElementById('slideTimer');
+                if (timerEl) timerEl.textContent = formatTime(slideSeconds);
+            }
+
+            function stopSlideTimer() {
+                if (slideTimerInterval) {
+                    clearInterval(slideTimerInterval);
+                    slideTimerInterval = null;
+                }
+            }
 
             if (isModerator) {
                 showModeratorView();
@@ -615,7 +626,7 @@ transition: transform 0.6s;</code></pre>
                 initPresentation();
             }
 
-            // Tastatursteuerung für Moderatorenansicht
+            // Tastatursteuerung
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'm' || e.key === 'M') {
                     e.preventDefault();
@@ -624,227 +635,229 @@ transition: transform 0.6s;</code></pre>
                     const hasModerator = currentUrl.includes('moderator=true');
                     
                     if (hasModerator) {
-                        // Aktuell in Moderator - zur Präsentation wechseln
                         window.open(baseUrl, '_blank');
                     } else {
-                        // Aktuell in Präsentation - zur Moderatoransicht wechseln
                         window.location.href = baseUrl + '?moderator=true';
                     }
                 }
             });
-        });
 
-        function formatTime(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            return [hours, minutes, secs].map(x => x.toString().padStart(2, '0')).join(':');
-        }
+            function initPresentation() {
+                // Warte kurz, um sicherzustellen, dass Reveal.js geladen ist
+                setTimeout(function() {
+                    try {
+                        let deck = new Reveal({
+                            controls: true,
+                            progress: true,
+                            history: true,
+                            center: true,
+                            transition: 'slide',
+                            fragments: 'all',
+                            slideNumber: true
+                        });
 
-        function startTotalTimer() {
-            if (isTotalTimerRunning) return;
-            isTotalTimerRunning = true;
-            totalTimerInterval = setInterval(() => {
-                totalSeconds++;
-                document.getElementById('totalTimer').textContent = formatTime(totalSeconds);
-            }, 1000);
-        }
+                        const storageKey = 'ki-websites-presentation-slide';
+                        startTotalTimer();
 
-        function resetTotalTimer() {
-            totalSeconds = 0;
-            document.getElementById('totalTimer').textContent = formatTime(totalSeconds);
-        }
+                        deck.on('slidechanged', function(event) {
+                            const slideIndex = event.indexh;
+                            localStorage.setItem(storageKey, slideIndex);
+                            localStorage.setItem(storageKey + '-timestamp', Date.now());
+                            
+                            // Reset slide timer
+                            stopSlideTimer();
+                            resetSlideTimer();
+                            startSlideTimer();
+                        });
 
-        function startSlideTimer() {
-            if (isSlideTimerRunning) return;
-            isSlideTimerRunning = true;
-            slideTimerInterval = setInterval(() => {
-                slideSeconds++;
-                document.getElementById('slideTimer').textContent = formatTime(slideSeconds);
-            }, 1000);
-        }
+                        // Start slide timer for first slide
+                        startSlideTimer();
 
-        function resetSlideTimer() {
-            slideSeconds = 0;
-            document.getElementById('slideTimer').textContent = formatTime(slideSeconds);
-        }
+                        window.addEventListener('storage', function(e) {
+                            if (e.key === storageKey) {
+                                const newIndex = parseInt(e.newValue);
+                                if (!isNaN(newIndex) && newIndex !== deck.getIndices().h) {
+                                    deck.slide(newIndex, 0);
+                                }
+                            }
+                        });
 
-        function stopSlideTimer() {
-            if (!isSlideTimerRunning) return;
-            isSlideTimerRunning = false;
-            clearInterval(slideTimerInterval);
-        }
+                        const savedIndex = localStorage.getItem(storageKey);
+                        if (savedIndex) {
+                            deck.slide(parseInt(savedIndex), 0);
+                        }
 
-        function initPresentation() {
-            let deck = new Reveal({
-                controls: true,
-                progress: true,
-                history: true,
-                center: true,
-                transition: 'slide',
-                fragments: 'all'
-            });
+                        // Keyboard hint
+                        const keyboardHint = document.createElement('div');
+                        keyboardHint.className = 'keyboard-hint';
+                        keyboardHint.textContent = 'Drücke M für Moderatorenansicht';
+                        document.body.appendChild(keyboardHint);
 
-            const storageKey = 'ki-websites-presentation-slide';
-
-            // Start Timer
-            startTotalTimer();
-
-            deck.on('slidechanged', function(event) {
-                const slideIndex = event.indexh;
-                localStorage.setItem(storageKey, slideIndex);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
-                
-                if (SLIDE_NOTES[slideIndex]) {
-                    localStorage.setItem(storageKey + '-notes', SLIDE_NOTES[slideIndex]);
-                }
-                if (SLIDE_TITLES[slideIndex]) {
-                    localStorage.setItem(storageKey + '-title', SLIDE_TITLES[slideIndex]);
-                }
-
-                // Reset slide timer when changing slide
-                stopSlideTimer();
-                resetSlideTimer();
-                startSlideTimer();
-            });
-
-            // Start slide timer for first slide
-            startSlideTimer();
-
-            window.addEventListener('storage', function(e) {
-                if (e.key === storageKey) {
-                    const newIndex = parseInt(e.newValue);
-                    if (!isNaN(newIndex) && newIndex !== deck.getIndices().h) {
-                        deck.slide(newIndex, 0);
+                    } catch (error) {
+                        console.error('Fehler bei Reveal.js Initialisierung:', error);
+                        // Zeige Fehlermeldung an
+                        const errorMsg = document.createElement('div');
+                        errorMsg.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: black; padding: 20px; border-radius: 10px; z-index: 10000; text-align: center;';
+                        errorMsg.innerHTML = '<strong>Fehler:</strong> Reveal.js konnte nicht initialisiert werden. Bitte laden Sie die Seite neu.';
+                        document.body.appendChild(errorMsg);
                     }
-                }
-            });
-
-            const savedIndex = localStorage.getItem(storageKey);
-            if (savedIndex) {
-                deck.slide(parseInt(savedIndex), 0);
+                }, 100);
             }
 
-            // Keyboard hint
-            const keyboardHint = document.createElement('div');
-            keyboardHint.className = 'keyboard-hint';
-            keyboardHint.textContent = 'Drücke M für Moderatorenansicht';
-            document.body.appendChild(keyboardHint);
-        }
+            function showModeratorView() {
+                document.querySelector('.reveal').style.display = 'none';
+                document.getElementById('moderatorView').style.display = 'block';
 
-        function showModeratorView() {
-            document.querySelector('.reveal').style.display = 'none';
-            document.getElementById('moderatorView').style.display = 'block';
+                const storageKey = 'ki-websites-presentation-slide';
+                const currentSlideEl = document.getElementById('moderatorCurrentSlide');
+                const totalSlidesEl = document.getElementById('moderatorTotalSlides');
+                const slideTitleEl = document.getElementById('moderatorSlideTitle');
+                const notesEl = document.getElementById('moderatorNotes');
+                const syncStatusEl = document.getElementById('syncStatus');
+                const lastUpdateEl = document.getElementById('lastUpdate');
 
-            const storageKey = 'ki-websites-presentation-slide';
-            const currentSlideEl = document.getElementById('moderatorCurrentSlide');
-            const totalSlidesEl = document.getElementById('moderatorTotalSlides');
-            const slideTitleEl = document.getElementById('moderatorSlideTitle');
-            const notesEl = document.getElementById('moderatorNotes');
-            const syncStatusEl = document.getElementById('syncStatus');
-            const lastUpdateEl = document.getElementById('lastUpdate');
+                const totalSlides = document.querySelectorAll ? document.querySelectorAll('.slides > section').length : 9;
+                if (totalSlidesEl) totalSlidesEl.textContent = totalSlides;
 
-            const totalSlides = document.querySelectorAll('.slides > section').length;
-            totalSlidesEl.textContent = totalSlides;
+                startTotalTimer();
 
-            // Start Timer
-            startTotalTimer();
+                const SLIDE_NOTES = [
+                    "Herzlich willkommen! Stellen Sie sich vor: Sie beschreiben in einfachen Worten, was Ihre Website können soll.",
+                    "Betonen: KI ersetzt nicht das Verständnis, sondern beschleunigt den Prozess.",
+                    "Wichtig: Alle Beispiele laufen komplett im Browser – kein Server nötig!",
+                    "Demo-Idee: Zeigen Sie, wie Sie die KI auffordern, den Code zu generieren.",
+                    "Wichtig: Die Synchronisation funktioniert nur zwischen Tabs desselben Browsers.",
+                    "Praxistipp: Lehrkräfte können Karteikarten für ihre Klasse erstellen.",
+                    "Betonen: Der KI-generierte Code ist ein STARTpunkt, kein Endprodukt.",
+                    "Live-Demo: Zeigen Sie, wie Sie eine einfache HTML-Datei auf GitHub hochladen.",
+                    "Zusammenfassung: KI ist ein mächtiges Werkzeug, das den Einstieg erleichtert."
+                ];
 
-            function updateModeratorView() {
-                const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                const notes = localStorage.getItem(storageKey + '-notes') || (SLIDE_NOTES[slideIndex] || '');
-                const title = localStorage.getItem(storageKey + '-title') || (SLIDE_TITLES[slideIndex] || '');
-                const timestamp = localStorage.getItem(storageKey + '-timestamp');
+                const SLIDE_TITLES = [
+                    "Titel: KI-gestützte Webentwicklung",
+                    "Einführung: Warum KI für Webentwicklung?",
+                    "Technologien: Die Bausteine unserer Beispiele",
+                    "Beispiel 1: Interaktives Quiz mit localStorage",
+                    "Beispiel 2: Kollaboratives Whiteboard mit BroadcastChannel",
+                    "Beispiel 3: Digitale Notizkarten mit IndexedDB",
+                    "Workflow: Von der Idee zur Website mit KI",
+                    "Deployment: Website auf GitHub Pages hosten",
+                    "Fazit & Ausblick: Nächste Schritte"
+                ];
 
-                currentSlideEl.textContent = slideIndex + 1;
-                slideTitleEl.textContent = title;
-                notesEl.value = notes;
+                function updateModeratorView() {
+                    const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
+                    const notes = localStorage.getItem(storageKey + '-notes') || (SLIDE_NOTES[slideIndex] || '');
+                    const title = localStorage.getItem(storageKey + '-title') || (SLIDE_TITLES[slideIndex] || '');
+                    const timestamp = localStorage.getItem(storageKey + '-timestamp');
 
-                if (timestamp) {
-                    const date = new Date(parseInt(timestamp));
-                    lastUpdateEl.textContent = date.toLocaleTimeString('de-DE');
-                }
+                    if (currentSlideEl) currentSlideEl.textContent = slideIndex + 1;
+                    if (slideTitleEl) slideTitleEl.textContent = title;
+                    if (notesEl) notesEl.value = notes;
 
-                syncStatusEl.textContent = '✅ Synchronisiert';
-                syncStatusEl.style.color = '#4CAF50';
-            }
+                    if (timestamp && lastUpdateEl) {
+                        const date = new Date(parseInt(timestamp));
+                        lastUpdateEl.textContent = date.toLocaleTimeString('de-DE');
+                    }
 
-            updateModeratorView();
-
-            window.addEventListener('storage', function(e) {
-                if (e.key && e.key.startsWith(storageKey)) {
-                    updateModeratorView();
-                    syncStatusEl.textContent = '🔄 Aktualisiert';
-                    syncStatusEl.style.color = '#FFC107';
-                    setTimeout(() => {
+                    if (syncStatusEl) {
                         syncStatusEl.textContent = '✅ Synchronisiert';
                         syncStatusEl.style.color = '#4CAF50';
-                    }, 1000);
+                    }
                 }
-            });
 
-            notesEl.addEventListener('input', function() {
-                const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                localStorage.setItem(storageKey + '-notes', this.value);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
-            });
-
-            document.getElementById('moderatorPrev').addEventListener('click', function() {
-                const currentIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                const newIndex = Math.max(0, currentIndex - 1);
-                localStorage.setItem(storageKey, newIndex);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
                 updateModeratorView();
-                stopSlideTimer();
-                resetSlideTimer();
-                startSlideTimer();
-            });
 
-            document.getElementById('moderatorNext').addEventListener('click', function() {
-                const currentIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                const newIndex = Math.min(totalSlides - 1, currentIndex + 1);
-                localStorage.setItem(storageKey, newIndex);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
-                updateModeratorView();
-                stopSlideTimer();
-                resetSlideTimer();
-                startSlideTimer();
-            });
+                window.addEventListener('storage', function(e) {
+                    if (e.key && e.key.startsWith(storageKey)) {
+                        updateModeratorView();
+                        if (syncStatusEl) {
+                            syncStatusEl.textContent = '🔄 Aktualisiert';
+                            syncStatusEl.style.color = '#FFC107';
+                            setTimeout(() => {
+                                if (syncStatusEl) {
+                                    syncStatusEl.textContent = '✅ Synchronisiert';
+                                    syncStatusEl.style.color = '#4CAF50';
+                                }
+                            }, 1000);
+                        }
+                    }
+                });
 
-            document.getElementById('moderatorFirst').addEventListener('click', function() {
-                localStorage.setItem(storageKey, 0);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
-                updateModeratorView();
-                stopSlideTimer();
-                resetSlideTimer();
-                startSlideTimer();
-            });
+                if (notesEl) {
+                    notesEl.addEventListener('input', function() {
+                        const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
+                        localStorage.setItem(storageKey + '-notes', this.value);
+                        localStorage.setItem(storageKey + '-timestamp', Date.now());
+                    });
+                }
 
-            document.getElementById('moderatorLast').addEventListener('click', function() {
-                localStorage.setItem(storageKey, totalSlides - 1);
-                localStorage.setItem(storageKey + '-timestamp', Date.now());
-                updateModeratorView();
-                stopSlideTimer();
-                resetSlideTimer();
-                startSlideTimer();
-            });
+                if (document.getElementById('moderatorPrev')) {
+                    document.getElementById('moderatorPrev').addEventListener('click', function() {
+                        const currentIndex = parseInt(localStorage.getItem(storageKey)) || 0;
+                        const newIndex = Math.max(0, currentIndex - 1);
+                        localStorage.setItem(storageKey, newIndex);
+                        localStorage.setItem(storageKey + '-timestamp', Date.now());
+                        updateModeratorView();
+                        stopSlideTimer();
+                        resetSlideTimer();
+                        startSlideTimer();
+                    });
+                }
 
-            document.getElementById('moderatorToggleView').addEventListener('click', function() {
-                const baseUrl = window.location.href.split('?')[0];
-                window.open(baseUrl, '_blank');
-            });
+                if (document.getElementById('moderatorNext')) {
+                    document.getElementById('moderatorNext').addEventListener('click', function() {
+                        const currentIndex = parseInt(localStorage.getItem(storageKey)) || 0;
+                        const newIndex = Math.min(totalSlides - 1, currentIndex + 1);
+                        localStorage.setItem(storageKey, newIndex);
+                        localStorage.setItem(storageKey + '-timestamp', Date.now());
+                        updateModeratorView();
+                        stopSlideTimer();
+                        resetSlideTimer();
+                        startSlideTimer();
+                    });
+                }
 
-            // Timer Reset Buttons
-            document.getElementById('resetTotalTimer').addEventListener('click', function() {
-                resetTotalTimer();
-            });
+                if (document.getElementById('moderatorFirst')) {
+                    document.getElementById('moderatorFirst').addEventListener('click', function() {
+                        localStorage.setItem(storageKey, 0);
+                        localStorage.setItem(storageKey + '-timestamp', Date.now());
+                        updateModeratorView();
+                        stopSlideTimer();
+                        resetSlideTimer();
+                        startSlideTimer();
+                    });
+                }
 
-            document.getElementById('resetSlideTimer').addEventListener('click', function() {
-                resetSlideTimer();
-            });
+                if (document.getElementById('moderatorLast')) {
+                    document.getElementById('moderatorLast').addEventListener('click', function() {
+                        localStorage.setItem(storageKey, totalSlides - 1);
+                        localStorage.setItem(storageKey + '-timestamp', Date.now());
+                        updateModeratorView();
+                        stopSlideTimer();
+                        resetSlideTimer();
+                        startSlideTimer();
+                    });
+                }
 
-            setInterval(updateModeratorView, 5000);
-        }
+                if (document.getElementById('moderatorToggleView')) {
+                    document.getElementById('moderatorToggleView').addEventListener('click', function() {
+                        const baseUrl = window.location.href.split('?')[0];
+                        window.open(baseUrl, '_blank');
+                    });
+                }
+
+                if (document.getElementById('resetTotalTimer')) {
+                    document.getElementById('resetTotalTimer').addEventListener('click', resetTotalTimer);
+                }
+
+                if (document.getElementById('resetSlideTimer')) {
+                    document.getElementById('resetSlideTimer').addEventListener('click', resetSlideTimer);
+                }
+
+                setInterval(updateModeratorView, 5000);
+            }
+        });
     </script>
 </body>
 </html>
