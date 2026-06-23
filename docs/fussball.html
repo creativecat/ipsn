@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. FC Nürnberg Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8b0000 0%, #d32f2f 50%, #8b0000 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ffcc00;
+        }
+
+        header h1 {
+            color: #ffcc00;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        header p {
+            color: #e0e0e0;
+            font-size: 1.2em;
+        }
+
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .question {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 204, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.05em;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 204, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: rgba(255, 204, 0, 0.3);
+            border-color: #ffcc00;
+        }
+
+        .option.correct {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+        }
+
+        .option.incorrect {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #ffcc00;
+            color: #8b0000;
+        }
+
+        .btn-primary:hover {
+            background: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            color: #ffcc00;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #e0e0e0;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .difficulty-btn {
+            padding: 10px 20px;
+            border: 2px solid #ffcc00;
+            background: transparent;
+            color: #ffcc00;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn:hover {
+            background: rgba(255, 204, 0, 0.2);
+        }
+
+        .difficulty-btn.selected {
+            background: #ffcc00;
+            color: #8b0000;
+        }
+
+        .result-screen {
+            text-align: center;
+        }
+
+        .result-screen h2 {
+            color: #ffcc00;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff00;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .feedback {
+            font-size: 1.2em;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ffcc00;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: #e0e0e0;
+            font-size: 0.95em;
+        }
+
+        .club-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .club-info h3 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .club-info p {
+            color: #e0e0e0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .difficulty-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ 1. FC Nürnberg Quiz</h1>
+            <p>Teste dein Wissen über den Club!</p>
+        </header>
+
+        <!-- Startbildschirm -->
+        <div class="quiz-container start-screen active" id="start-screen">
+            <h2>Willkommen beim 1. FC Nürnberg Quiz!</h2>
+            <p>Wähle deine Schwierigkeitsstufe und starte das Quiz.</p>
+            
+            <div class="difficulty-selector">
+                <button class="difficulty-btn" onclick="selectDifficulty('easy')" id="easy-btn">Leicht</button>
+                <button class="difficulty-btn" onclick="selectDifficulty('medium')" id="medium-btn">Mittel</button>
+                <button class="difficulty-btn" onclick="selectDifficulty('hard')" id="hard-btn">Schwer</button>
+            </div>
+            
+            <button class="btn btn-primary" onclick="startQuiz()" id="start-btn" disabled>Quiz starten</button>
+        </div>
+
+        <!-- Quiz-Fragen -->
+        <div class="quiz-container" id="quiz-screen">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text"></div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question" id="question"></div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prev-btn">Zurück</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="next-btn">Weiter</button>
+            </div>
+        </div>
+
+        <!-- Ergebnisbildschirm -->
+        <div class="quiz-container result-screen" id="result-screen">
+            <h2>Quiz beendet! 🎉</h2>
+            <div class="score" id="score"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="btn btn-primary" onclick="restartQuiz()">Nochmal spielen</button>
+        </div>
+
+        <!-- Club-Info -->
+        <div class="club-info">
+            <h3>📚 Über den 1. FC Nürnberg</h3>
+            <p>Der 1. FC Nürnberg ist ein traditioneller Fußballverein aus Nürnberg, Bayern. Gegründet am 4. Mai 1900, ist er einer der ältesten und erfolgreichsten Vereine Deutschlands. Der Club spielt seine Heimspiele im Max-Morlock-Stadion und hat eine treue Fangemeinde. Die Vereinsfarben sind Rot und Schwarz.</p>
+        </div>
+    </div>
+
+    <script>
+        // Quiz-Daten
+        const quizData = {
+            easy: [
+                {
+                    question: "In welchem Jahr wurde der 1. FC Nürnberg gegründet?",
+                    options: ["1900", "1905", "1910", "1895"],
+                    answer: 0
+                },
+                {
+                    question: "Wie heißen die Vereinsfarben des 1. FC Nürnberg?",
+                    options: ["Rot und Schwarz", "Blau und Weiß", "Grün und Gelb", "Schwarz und Gelb"],
+                    answer: 0
+                },
+                {
+                    question: "Wie heißt das Stadion des 1. FC Nürnberg?",
+                    options: ["Max-Morlock-Stadion", "Allianz Arena", "Signal Iduna Park", "Veltins-Arena"],
+                    answer: 0
+                },
+                {
+                    question: "In welcher Liga spielt der 1. FC Nürnberg aktuell (2024)?",
+                    options: ["2. Bundesliga", "Bundesliga", "3. Liga", "Regionalliga"],
+                    answer: 0
+                },
+                {
+                    question: "Was ist der Spitzname des 1. FC Nürnberg?",
+                    options: ["Der Club", "Die Löwen", "Die Bayern", "Die Roten"],
+                    answer: 0
+                }
+            ],
+            medium: [
+                {
+                    question: "Wie oft hat der 1. FC Nürnberg die deutsche Meisterschaft gewonnen?",
+                    options: ["9 Mal", "5 Mal", "12 Mal", "7 Mal"],
+                    answer: 0
+                },
+                {
+                    question: "Welcher berühmte Trainer führte den 1. FC Nürnberg in den 1960er Jahren?",
+                    options: ["Max Merkel", "Otto Rehhagel", "Udo Lattek", "Hennes Weisweiler"],
+                    answer: 0
+                },
+                {
+                    question: "In welchem Jahr gewann der 1. FC Nürnberg den DFB-Pokal?",
+                    options: ["1962", "1982", "2007", "1939"],
+                    answer: 2
+                },
+                {
+                    question: "Welcher Spieler hält den Rekord für die meisten Tore in einer Saison für den 1. FC Nürnberg?",
+                    options: ["Heinz Streli", "Max Morlock", "Andreas Köpke", "Thomas Brunner"],
+                    answer: 0
+                },
+                {
+                    question: "Wie viele Mal ist der 1. FC Nürnberg aus der Bundesliga abgestiegen?",
+                    options: ["8 Mal", "5 Mal", "10 Mal", "12 Mal"],
+                    answer: 0
+                }
+            ],
+            hard: [
+                {
+                    question: "Welcher Spieler des 1. FC Nürnberg wurde 1961 Torschützenkönig der Bundesliga?",
+                    options: ["Heinz Streli", "Max Morlock", "Uwe Reinders", "Franz Brungs"],
+                    answer: 0
+                },
+                {
+                    question: "In welchem Jahr stieg der 1. FC Nürnberg erstmals in die Bundesliga auf?",
+                    options: ["1963", "1965", "1968", "1970"],
+                    answer: 0
+                },
+                {
+                    question: "Welcher Verein ist der 'ewige Rivale' des 1. FC Nürnberg?",
+                    options: ["FC Bayern München", "Eintracht Frankfurt", "VfB Stuttgart", "1. FC Köln"],
+                    answer: 0
+                },
+                {
+                    question: "Wie hieß das erste Stadion des 1. FC Nürnberg?",
+                    options: ["Zerzabelshof", "Städtisches Stadion", "Frankenstadion", "Max-Morlock-Stadion"],
+                    answer: 0
+                },
+                {
+                    question: "Welcher Nationalspieler begann seine Karriere beim 1. FC Nürnberg?",
+                    options: ["Thomas Müller", "Philipp Lahm", "Bastian Schweinsteiger", "Andreas Köpke"],
+                    answer: 3
+                }
+            ]
+        };
+
+        // Quiz-Status
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedDifficulty = null;
+        let userAnswers = [];
+
+        // DOM-Elemente
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const scoreElement = document.getElementById('score');
+        const feedbackElement = document.getElementById('feedback');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Schwierigkeitsgrad auswählen
+        function selectDifficulty(difficulty) {
+            selectedDifficulty = difficulty;
+            
+            // Entferne die Auswahl von allen Buttons
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Markiere den ausgewählten Button
+            document.getElementById(`${difficulty}-btn`).classList.add('selected');
+            
+            // Aktiviere den Start-Button
+            startBtn.disabled = false;
+        }
+
+        // Quiz starten
+        function startQuiz() {
+            if (!selectedDifficulty) return;
+            
+            currentQuiz = quizData[selectedDifficulty];
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = Array(currentQuiz.length).fill(null);
+            
+            startScreen.classList.remove('active');
+            quizScreen.classList.add('active');
+            resultScreen.classList.remove('active');
+            
+            showQuestion();
+        }
+
+        // Frage anzeigen
+        function showQuestion() {
+            const question = currentQuiz[currentQuestionIndex];
+            questionElement.textContent = question.question;
+            
+            optionsElement.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option';
+                button.textContent = option;
+                button.onclick = () => selectOption(index);
+                
+                // Markiere bereits ausgewählte Antwort
+                if (userAnswers[currentQuestionIndex] === index) {
+                    button.classList.add('selected');
+                }
+                
+                // Zeige korrekte/inkorrekte Antworten an, wenn bereits beantwortet
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    if (index === question.answer) {
+                        button.classList.add('correct');
+                    } else if (userAnswers[currentQuestionIndex] === index) {
+                        button.classList.add('incorrect');
+                    }
+                }
+                
+                optionsElement.appendChild(button);
+            });
+            
+            // Aktualisiere Fortschrittsbalken
+            const progress = ((currentQuestionIndex) / currentQuiz.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `Frage ${currentQuestionIndex + 1} von ${currentQuiz.length}`;
+            
+            // Aktualisiere Navigationsbuttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.textContent = currentQuestionIndex === currentQuiz.length - 1 ? 'Ergebnis anzeigen' : 'Weiter';
+        }
+
+        // Option auswählen
+        function selectOption(index) {
+            const question = currentQuiz[currentQuestionIndex];
+            
+            // Speichere die Antwort des Benutzers
+            userAnswers[currentQuestionIndex] = index;
+            
+            // Überprüfe, ob die Antwort korrekt ist
+            if (index === question.answer) {
+                score++;
+            }
+            
+            showQuestion();
+        }
+
+        // Nächste Frage
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // Vorherige Frage
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        // Ergebnis anzeigen
+        function showResult() {
+            quizScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            const percentage = Math.round((score / currentQuiz.length) * 100);
+            scoreElement.textContent = `${score}/${currentQuiz.length}`;
+            
+            // Feedback basierend auf der Punktzahl
+            let feedback = '';
+            if (percentage === 100) {
+                feedback = 'Perfekt! Du bist ein echter 1. FC Nürnberg Fan! 🏆';
+            } else if (percentage >= 80) {
+                feedback = 'Sehr gut! Du kennst dich wirklich gut aus! 👍';
+            } else if (percentage >= 60) {
+                feedback = 'Gut gemacht! Aber es gibt noch etwas zu lernen. 😊';
+            } else if (percentage >= 40) {
+                feedback = 'Nicht schlecht, aber du könntest mehr über den Club wissen. 🤔';
+            } else {
+                feedback = 'Übe ein bisschen mehr! Der 1. FC Nürnberg hat eine reiche Geschichte. 📚';
+            }
+            
+            feedbackElement.textContent = feedback;
+        }
+
+        // Quiz neu starten
+        function restartQuiz() {
+            resultScreen.classList.remove('active');
+            startScreen.classList.add('active');
+            
+            // Zurücksetzen der Auswahl
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            startBtn.disabled = true;
+            selectedDifficulty = null;
+        }
+    </script>
+</body>
+</html>
