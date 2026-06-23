@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. FC Nürnberg Quiz</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #8b0000, #c00000);
+        color: white;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .quiz-container {
+        max-width: 800px;
+        width: 100%;
+        background: rgba(0,0,0,0.25);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .question {
+        margin-bottom: 25px;
+    }
+
+    .question h3 {
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: block;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    label:hover {
+        background: rgba(255,255,255,0.15);
+    }
+
+    button {
+        background: white;
+        color: #8b0000;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: #f0f0f0;
+    }
+
+    #result {
+        margin-top: 25px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .correct {
+        color: #7CFC00;
+    }
+
+    .wrong {
+        color: #FFD700;
+    }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>⚽ 1. FC Nürnberg Quiz ⚽</h1>
+
+    <form id="quizForm">
+
+        <div class="question">
+            <h3>1. In welchem Jahr wurde der 1. FC Nürnberg gegründet?</h3>
+            <label><input type="radio" name="q1" value="a"> 1899</label>
+            <label><input type="radio" name="q1" value="b"> 1900</label>
+            <label><input type="radio" name="q1" value="c"> 1905</label>
+            <label><input type="radio" name="q1" value="d"> 1910</label>
+        </div>
+
+        <div class="question">
+            <h3>2. Wie lautet der Spitzname des Vereins?</h3>
+            <label><input type="radio" name="q2" value="a"> Die Roten</label>
+            <label><input type="radio" name="q2" value="b"> Die Adler</label>
+            <label><input type="radio" name="q2" value="c"> Der Club</label>
+            <label><input type="radio" name="q2" value="d"> Die Frankenlöwen</label>
+        </div>
+
+        <div class="question">
+            <h3>3. Wie viele deutsche Meisterschaften gewann der Club bislang?</h3>
+            <label><input type="radio" name="q3" value="a"> 7</label>
+            <label><input type="radio" name="q3" value="b"> 8</label>
+            <label><input type="radio" name="q3" value="c"> 9</label>
+            <label><input type="radio" name="q3" value="d"> 10</label>
+        </div>
+
+        <div class="question">
+            <h3>4. In welchem Stadion trägt der 1. FC Nürnberg seine Heimspiele aus?</h3>
+            <label><input type="radio" name="q4" value="a"> Max-Morlock-Stadion</label>
+            <label><input type="radio" name="q4" value="b"> Frankenstadion</label>
+            <label><input type="radio" name="q4" value="c"> EasyCredit-Arena</label>
+            <label><input type="radio" name="q4" value="d"> Club-Arena</label>
+        </div>
+
+        <div class="question">
+            <h3>5. Welche Vereinsfarben hat der 1. FC Nürnberg?</h3>
+            <label><input type="radio" name="q5" value="a"> Rot und Weiß</label>
+            <label><input type="radio" name="q5" value="b"> Rot und Schwarz</label>
+            <label><input type="radio" name="q5" value="c"> Rot und Blau</label>
+            <label><input type="radio" name="q5" value="d"> Schwarz und Weiß</label>
+        </div>
+
+        <div class="question">
+            <h3>6. Welcher ehemalige Nationalspieler wird oft als größte Vereinslegende angesehen?</h3>
+            <label><input type="radio" name="q6" value="a"> Lothar Matthäus</label>
+            <label><input type="radio" name="q6" value="b"> Max Morlock</label>
+            <label><input type="radio" name="q6" value="c"> Fritz Walter</label>
+            <label><input type="radio" name="q6" value="d"> Uwe Seeler</label>
+        </div>
+
+        <div class="question">
+            <h3>7. Aus welcher Region stammt der Verein?</h3>
+            <label><input type="radio" name="q7" value="a"> Oberbayern</label>
+            <label><input type="radio" name="q7" value="b"> Unterfranken</label>
+            <label><input type="radio" name="q7" value="c"> Mittelfranken</label>
+            <label><input type="radio" name="q7" value="d"> Oberpfalz</label>
+        </div>
+
+        <button type="button" onclick="checkQuiz()">Quiz auswerten</button>
+
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+
+    const answers = {
+        q1: "b",
+        q2: "c",
+        q3: "c",
+        q4: "a",
+        q5: "a",
+        q6: "b",
+        q7: "c"
+    };
+
+    let score = 0;
+    let total = Object.keys(answers).length;
+
+    for (let question in answers) {
+        const selected = document.querySelector(
+            `input[name="${question}"]:checked`
+        );
+
+        if (selected && selected.value === answers[question]) {
+            score++;
+        }
+    }
+
+    let message = "";
+
+    if (score === total) {
+        message = "🏆 Perfekt! Du bist ein echter Club-Experte!";
+    } else if (score >= 5) {
+        message = "👏 Stark! Du kennst den Club sehr gut.";
+    } else if (score >= 3) {
+        message = "👍 Solides Wissen über den Club.";
+    } else {
+        message = "📚 Da geht noch was! Zeit für etwas Club-Geschichte.";
+    }
+
+    document.getElementById("result").innerHTML =
+        `Du hast <span class="correct">${score}</span> von <span class="correct">${total}</span> Punkten erreicht.<br><br>${message}`;
+}
+</script>
+
+</body>
+</html>
