@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Taschenrechner</title>
+  <title>Wissenschaftlicher Taschenrechner</title>
   <style>
     :root {
-      --bg: #111827;
+      --bg: #0f172a;
       --panel: #1f2937;
       --display: #0b1220;
       --btn: #374151;
@@ -15,55 +15,56 @@
       --op-hover: #d97706;
       --equal: #22c55e;
       --equal-hover: #16a34a;
+      --func: #6366f1;
+      --func-hover: #4f46e5;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
       --text: #f9fafb;
       --muted: #9ca3af;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #0f172a, #111827);
+      background: linear-gradient(135deg, #020617, #0f172a);
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
     }
 
     .calculator {
-      width: min(92vw, 360px);
-      background: rgba(31, 41, 55, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
+      width: min(96vw, 440px);
+      background: rgba(31, 41, 55, 0.96);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
       padding: 18px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(8px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.4);
     }
 
     .title {
-      margin: 0 0 14px;
-      font-size: 1rem;
-      color: var(--muted);
+      margin: 0 0 12px;
       text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
       letter-spacing: 0.04em;
     }
 
     .display {
       width: 100%;
-      height: 76px;
+      height: 84px;
       border: none;
       border-radius: 16px;
       background: var(--display);
       color: var(--text);
-      font-size: 2rem;
+      font-size: 1.9rem;
       text-align: right;
       padding: 16px;
       margin-bottom: 14px;
       outline: none;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .buttons {
@@ -75,8 +76,8 @@
     button {
       border: none;
       border-radius: 16px;
-      padding: 18px 0;
-      font-size: 1.15rem;
+      padding: 16px 0;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       color: var(--text);
@@ -85,56 +86,43 @@
       user-select: none;
     }
 
-    button:hover {
-      background: var(--btn-hover);
-    }
+    button:hover { background: var(--btn-hover); }
+    button:active { transform: scale(0.97); }
 
-    button:active {
-      transform: scale(0.97);
-    }
+    .op { background: var(--op); }
+    .op:hover { background: var(--op-hover); }
 
-    .op {
-      background: var(--op);
-    }
-
-    .op:hover {
-      background: var(--op-hover);
-    }
+    .func { background: var(--func); }
+    .func:hover { background: var(--func-hover); }
 
     .equal {
       background: var(--equal);
       grid-column: span 2;
     }
+    .equal:hover { background: var(--equal-hover); }
 
-    .equal:hover {
-      background: var(--equal-hover);
+    .danger {
+      background: var(--danger);
     }
+    .danger:hover { background: var(--danger-hover); }
 
-    .clear {
-      background: #ef4444;
-    }
-
-    .clear:hover {
-      background: #dc2626;
-    }
-
-    .wide {
-      grid-column: span 2;
-    }
-
-    .small {
-      font-size: 1rem;
-    }
+    .wide { grid-column: span 2; }
+    .triple { grid-column: span 3; }
   </style>
 </head>
 <body>
   <main class="calculator">
-    <h1 class="title">Taschenrechner</h1>
+    <h1 class="title">Wissenschaftlicher Taschenrechner</h1>
     <input id="display" class="display" type="text" readonly value="" />
 
     <div class="buttons">
-      <button class="clear" onclick="clearDisplay()">C</button>
-      <button class="small" onclick="backspace()">⌫</button>
+      <button class="danger" onclick="clearDisplay()">C</button>
+      <button onclick="backspace()">⌫</button>
+      <button class="func" onclick="appendValue('(')">(</button>
+      <button class="func" onclick="appendValue(')')">)</button>
+
+      <button class="func" onclick="appendValue('Math.sqrt(')">√</button>
+      <button class="func" onclick="appendValue('fact(')">x!</button>
       <button class="op" onclick="appendValue('%')">%</button>
       <button class="op" onclick="appendValue('/')">÷</button>
 
@@ -154,8 +142,11 @@
       <button class="op" onclick="appendValue('+')">+</button>
 
       <button class="wide" onclick="appendValue('0')">0</button>
-      <button onclick="appendValue('.')">,</button>
+      <button onclick="appendValue('.')">.</button>
+      <button class="func" onclick="appendValue('**')">xʸ</button>
+
       <button class="equal" onclick="calculate()">=</button>
+      <button class="func" onclick="appendValue('Math.PI')">π</button>
     </div>
   </main>
 
@@ -174,11 +165,19 @@
       display.value = display.value.slice(0, -1);
     }
 
+    function fact(n) {
+      n = Number(n);
+      if (!Number.isInteger(n) || n < 0) throw new Error('Ungültig');
+      let result = 1;
+      for (let i = 2; i <= n; i++) result *= i;
+      return result;
+    }
+
     function calculate() {
       try {
         let expr = display.value.replace(/,/g, '.');
-        expr = expr.replace(/%/g, '/100');
-        const result = Function('return (' + expr + ')')();
+        expr = expr.replace(/Math\.sqrt\(/g, 'Math.sqrt(');
+        const result = Function('fact', 'Math', 'return (' + expr + ')')(fact, Math);
         if (!Number.isFinite(result)) throw new Error('Ungültig');
         display.value = String(result).replace('.', ',');
       } catch (e) {
@@ -187,9 +186,11 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      const allowed = '0123456789+-*/%.';
+      const allowed = '0123456789+-*/%.()';
       if (allowed.includes(e.key)) {
-        appendValue(e.key === '.' ? ',' : e.key);
+        appendValue(e.key);
+      } else if (e.key === '^') {
+        appendValue('**');
       } else if (e.key === 'Enter') {
         calculate();
       } else if (e.key === 'Backspace') {
