@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktiver Taschenrechner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            text-align: center;
+        }
+
+        .calculator-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        .calculator {
+            width: 320px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 0 auto;
+        }
+
+        .display {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ffcc;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .display:hover {
+            border-color: rgba(0, 255, 204, 0.6);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 12px;
+        }
+
+        .btn {
+            height: 60px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-operator {
+            background: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .btn-operator:hover {
+            background: rgba(0, 255, 204, 0.4);
+        }
+
+        .btn-equals {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+            grid-column: span 2;
+        }
+
+        .btn-equals:hover {
+            background: rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-clear {
+            background: rgba(255, 53, 71, 0.2);
+            color: #ff3547;
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 53, 71, 0.4);
+        }
+
+        .btn-delete {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-number {
+            background: rgba(100, 180, 255, 0.2);
+            color: #64b4ff;
+        }
+
+        .btn-number:hover {
+            background: rgba(100, 180, 255, 0.4);
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        .instructions {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            max-width: 400px;
+        }
+
+        .instructions p {
+            margin-bottom: 10px;
+        }
+
+        .history {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 100px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .history::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .history::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 204, 0.5);
+            border-radius: 3px;
+        }
+
+        .history-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .history-entry:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 400px) {
+            .calculator {
+                width: 100%;
+                max-width: 300px;
+                padding: 20px;
+            }
+
+            .display {
+                height: 60px;
+                font-size: 1.5em;
+            }
+
+            .btn {
+                height: 50px;
+                font-size: 1em;
+            }
+
+            .calculator-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1 class="calculator-title">🖱️ Taschenrechner</h1>
+        
+        <div class="calculator">
+            <div class="display" id="display">0</div>
+            
+            <div class="buttons">
+                <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+                <button class="btn btn-delete" onclick="deleteLast()">⌫</button>
+                <button class="btn btn-operator" onclick="appendOperator('%')">%</button>
+                <button class="btn btn-operator" onclick="appendOperator('/')">÷</button>
+                
+                <button class="btn btn-number" onclick="appendNumber('7')">7</button>
+                <button class="btn btn-number" onclick="appendNumber('8')">8</button>
+                <button class="btn btn-number" onclick="appendNumber('9')">9</button>
+                <button class="btn btn-operator" onclick="appendOperator('*')">×</button>
+                
+                <button class="btn btn-number" onclick="appendNumber('4')">4</button>
+                <button class="btn btn-number" onclick="appendNumber('5')">5</button>
+                <button class="btn btn-number" onclick="appendNumber('6')">6</button>
+                <button class="btn btn-operator" onclick="appendOperator('-')">-</button>
+                
+                <button class="btn btn-number" onclick="appendNumber('1')">1</button>
+                <button class="btn btn-number" onclick="appendNumber('2')">2</button>
+                <button class="btn btn-number" onclick="appendNumber('3')">3</button>
+                <button class="btn btn-operator" onclick="appendOperator('+')">+</button>
+                
+                <button class="btn btn-number btn-zero" onclick="appendNumber('0')">0</button>
+                <button class="btn btn-number" onclick="appendNumber('.')">,</button>
+                <button class="btn btn-equals" onclick="calculate()">=</button>
+            </div>
+            
+            <div class="history" id="history"></div>
+        </div>
+        
+        <div class="instructions">
+            <p>💡 <strong>Bedienung:</strong> Klicke mit der Maus auf die Tasten, um den Taschenrechner zu bedienen.</p>
+            <p>📝 <strong>Verlauf:</strong> Alle Berechnungen werden im Verlauf gespeichert.</p>
+            <p>🔄 <strong>Zurücksetzen:</strong> Nutze die Taste "C", um alles zurückzusetzen.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '0';
+        let previousInput = '';
+        let operation = null;
+        let resetInput = false;
+        const history = [];
+
+        const display = document.getElementById('display');
+        const historyElement = document.getElementById('history');
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+        }
+
+        function appendNumber(number) {
+            if (currentInput === '0' || resetInput) {
+                currentInput = number;
+                resetInput = false;
+            } else {
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (operation !== null) calculate();
+            previousInput = currentInput;
+            operation = op;
+            resetInput = true;
+            
+            // Zeige die aktuelle Operation im Display
+            display.textContent = previousInput + ' ' + getDisplayOperator(op);
+        }
+
+        function getDisplayOperator(op) {
+            const operators = {
+                '+': '+',
+                '-': '-',
+                '*': '×',
+                '/': '÷',
+                '%': '%'
+            };
+            return operators[op] || op;
+        }
+
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+
+            if (isNaN(prev) || isNaN(current) || operation === null) return;
+
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                case '%':
+                    result = prev % current;
+                    break;
+                default:
+                    return;
+            }
+
+            // Formatierung des Ergebnisses
+            if (result.toString().includes('.')) {
+                // Maximal 8 Dezimalstellen anzeigen
+                result = parseFloat(result.toFixed(8));
+            }
+
+            // Speichere in der History
+            const historyEntry = `${previousInput} ${getDisplayOperator(operation)} ${currentInput} = ${result}`;
+            history.unshift(historyEntry);
+            if (history.length > 5) history.pop();
+            updateHistory();
+
+            currentInput = result.toString();
+            operation = null;
+            previousInput = '';
+            resetInput = true;
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = '';
+            operation = null;
+            resetInput = false;
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (currentInput.length === 1 || (currentInput.length === 2 && currentInput.startsWith('-'))) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
+            }
+            updateDisplay();
+        }
+
+        function updateHistory() {
+            historyElement.innerHTML = '';
+            history.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'history-entry';
+                div.textContent = entry;
+                historyElement.appendChild(div);
+            });
+        }
+
+        // Tastaturunterstützung hinzufügen
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') {
+                appendNumber(e.key);
+            } else if (e.key === '.') {
+                appendNumber('.');
+            } else if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '%') {
+                appendOperator(e.key);
+            } else if (e.key === 'Enter' || e.key === '=') {
+                calculate();
+            } else if (e.key === 'Escape') {
+                clearDisplay();
+            } else if (e.key === 'Backspace') {
+                deleteLast();
+            }
+        });
+
+        // Initialisierung
+        updateDisplay();
+    </script>
+</body>
+</html>
