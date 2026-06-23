@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interaktive Websites mit KI auf GitHub erstellen</title>
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #1a1a1a;
@@ -19,7 +19,7 @@
             overflow: hidden;
             height: 100vh;
         }
-        
+
         .moderator-container {
             display: none;
             position: fixed;
@@ -34,7 +34,7 @@
             z-index: 1000;
             overflow-y: auto;
         }
-        
+
         .moderator-header {
             display: flex;
             justify-content: space-between;
@@ -43,21 +43,21 @@
             padding-bottom: 15px;
             border-bottom: 2px solid #333;
         }
-        
+
         .moderator-title {
             font-size: 1.8em;
             font-weight: bold;
             color: #4fc3f7;
             margin: 0;
         }
-        
+
         .moderator-controls {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin-top: 10px;
         }
-        
+
         .moderator-button {
             background: #333;
             color: white;
@@ -68,56 +68,56 @@
             font-size: 1em;
             transition: all 0.3s ease;
         }
-        
+
         .moderator-button:hover {
             background: #4fc3f7;
             transform: translateY(-2px);
         }
-        
+
         .moderator-button:active {
             transform: translateY(0);
         }
-        
+
         .moderator-main {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-top: 20px;
         }
-        
+
         .moderator-slide-preview {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 15px;
             border: 1px solid #444;
         }
-        
+
         .moderator-slide-preview h3 {
             color: #4fc3f7;
             margin-top: 0;
             border-bottom: 1px solid #444;
             padding-bottom: 10px;
         }
-        
+
         .moderator-slide-preview .preview-content {
             font-size: 0.9em;
             color: #bbb;
         }
-        
+
         .moderator-notes {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 15px;
             border: 1px solid #444;
         }
-        
+
         .moderator-notes h3 {
             color: #4fc3f7;
             margin-top: 0;
             border-bottom: 1px solid #444;
             padding-bottom: 10px;
         }
-        
+
         .moderator-notes textarea {
             width: 100%;
             height: 250px;
@@ -130,7 +130,7 @@
             font-size: 1em;
             resize: none;
         }
-        
+
         .moderator-info {
             background: #2a2a2a;
             border-radius: 8px;
@@ -138,32 +138,32 @@
             border: 1px solid #444;
             margin-top: 20px;
         }
-        
+
         .moderator-info h3 {
             color: #4fc3f7;
             margin-top: 0;
             border-bottom: 1px solid #444;
             padding-bottom: 10px;
         }
-        
+
         .moderator-info p {
             margin: 5px 0;
             color: #bbb;
         }
-        
+
         .clock {
             font-family: monospace;
             font-size: 1.2em;
             color: #4fc3f7;
         }
-        
+
         .timer-container {
             display: flex;
             gap: 20px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
-        
+
         .timer-box {
             background: #2a2a2a;
             border-radius: 8px;
@@ -173,26 +173,26 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .timer-label {
             font-size: 0.8em;
             color: #888;
             margin-bottom: 5px;
         }
-        
+
         .timer-value {
             font-family: monospace;
             font-size: 1.3em;
             color: #4fc3f7;
             font-weight: bold;
         }
-        
+
         .timer-controls {
             display: flex;
             gap: 5px;
             margin-top: 5px;
         }
-        
+
         .timer-button {
             background: #444;
             color: #bbb;
@@ -203,23 +203,23 @@
             font-size: 0.8em;
             transition: all 0.2s ease;
         }
-        
+
         .timer-button:hover {
             background: #4fc3f7;
             color: #1a1a1a;
         }
-        
+
         .presentation-container {
             height: 100vh;
             overflow: hidden;
             position: relative;
         }
-        
+
         .slides {
             height: 100%;
             position: relative;
         }
-        
+
         .slide {
             position: absolute;
             top: 0;
@@ -237,28 +237,28 @@
             transition: opacity 0.5s ease, visibility 0.5s ease;
             box-sizing: border-box;
         }
-        
+
         .slide.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .slide h1, .slide h2, .slide h3 {
             color: #4fc3f7;
             text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
         }
-        
+
         .fragment {
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
         }
-        
+
         .fragment.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         pre code {
             background: rgba(0, 0, 0, 0.8);
             padding: 15px;
@@ -266,7 +266,7 @@
             font-size: 0.9em;
             line-height: 1.5;
         }
-        
+
         .example-button {
             display: inline-block;
             background: #4fc3f7;
@@ -279,25 +279,25 @@
             transition: all 0.3s ease;
             border: 2px solid #4fc3f7;
         }
-        
+
         .example-button:hover {
             background: transparent;
             color: #4fc3f7;
             transform: scale(1.05);
         }
-        
+
         .ai-icon {
             font-size: 3em;
             margin: 20px 0;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+
         .qrcode-image {
             width: 200px;
             height: 200px;
@@ -308,19 +308,19 @@
             transition: all 0.3s ease;
             background: #333;
         }
-        
+
         .qrcode-image:hover {
             border-color: #4fc3f7;
             box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
         }
-        
+
         .examples-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
-        
+
         .example-card {
             background: rgba(79, 195, 247, 0.1);
             border: 2px solid #4fc3f7;
@@ -328,12 +328,12 @@
             padding: 20px;
             transition: all 0.3s ease;
         }
-        
+
         .example-card:hover {
             background: rgba(79, 195, 247, 0.2);
             transform: translateY(-5px);
         }
-        
+
         .keyboard-hint {
             position: fixed;
             bottom: 20px;
@@ -346,7 +346,7 @@
             z-index: 100;
             font-weight: bold;
         }
-        
+
         .slide-number {
             position: fixed;
             bottom: 20px;
@@ -358,7 +358,7 @@
             font-size: 0.8em;
             z-index: 100;
         }
-        
+
         .sync-hint {
             position: fixed;
             bottom: 20px;
@@ -370,7 +370,7 @@
             font-size: 0.8em;
             z-index: 100;
         }
-        
+
         @media (max-width: 768px) {
             .moderator-main {
                 grid-template-columns: 1fr;
@@ -399,7 +399,7 @@
             <h1 class="moderator-title">🎤 Moderatorenansicht</h1>
             <div class="clock" id="currentTime">--:--:--</div>
         </div>
-        
+
         <div class="timer-container">
             <div class="timer-box">
                 <div class="timer-label">⏱️ Gesamtzeit</div>
@@ -416,7 +416,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="moderator-main">
             <div class="moderator-slide-preview">
                 <h3>📄 Aktuelle Folie</h3>
@@ -425,13 +425,13 @@
                     <p><strong>Titel:</strong> <span id="moderatorSlideTitle">Lade...</span></p>
                 </div>
             </div>
-            
+
             <div class="moderator-notes">
                 <h3>📝 Notizen</h3>
                 <textarea id="moderatorNotes" placeholder="Notizen zur aktuellen Folie..."></textarea>
             </div>
         </div>
-        
+
         <div class="moderator-controls">
             <button class="moderator-button" id="moderatorPrev">⏮ Zurück</button>
             <button class="moderator-button" id="moderatorNext">Weiter ⏭</button>
@@ -439,7 +439,7 @@
             <button class="moderator-button" id="moderatorLast">📌 Letzte Folie</button>
             <button class="moderator-button" id="moderatorToggleView">Präsentation anzeigen</button>
         </div>
-        
+
         <div class="moderator-info">
             <h3>ℹ️ Informationen</h3>
             <p><strong>Synchronisationsstatus:</strong> <span id="syncStatus">✅ Verbunden</span></p>
@@ -450,6 +450,7 @@
 
     <div class="presentation-container">
         <div class="slides" id="slides">
+            <!-- Slide 0: Titel -->
             <div class="slide active" data-index="0">
                 <div class="ai-icon">🤖</div>
                 <h1>Interaktive Websites mit KI auf GitHub erstellen</h1>
@@ -462,6 +463,7 @@
                 </p>
             </div>
 
+            <!-- Slide 1: Warum KI für Webentwicklung? -->
             <div class="slide" data-index="1">
                 <h2>Warum KI für Webentwicklung?</h2>
                 <div class="fragment">
@@ -478,6 +480,7 @@
                 </div>
             </div>
 
+            <!-- Slide 2: So funktioniert's im Workshop -->
             <div class="slide" data-index="2">
                 <h2>So funktioniert's im Workshop</h2>
                 <div class="fragment">
@@ -494,6 +497,7 @@
                 </div>
             </div>
 
+            <!-- Slide 3: Was Sie im Workshop erwartet -->
             <div class="slide" data-index="3">
                 <h2>💡 Was Sie im Workshop erwartet</h2>
                 <div class="fragment">
@@ -510,6 +514,7 @@
                 </div>
             </div>
 
+            <!-- Slide 4: Warum wir Mistral nutzen -->
             <div class="slide" data-index="4">
                 <h2>🌍 Warum wir Mistral nutzen</h2>
                 <div class="fragment">
@@ -530,6 +535,7 @@
                 </div>
             </div>
 
+            <!-- Slide 5: Hintergrund: US-Regulierungen & KI -->
             <div class="slide" data-index="5">
                 <h2>🔍 Hintergrund: US-Regulierungen & KI</h2>
                 <div class="fragment">
@@ -550,6 +556,7 @@
                 </div>
             </div>
 
+            <!-- Slide 6: Was Sie mitbringen sollten (mit QR-Code) -->
             <div class="slide" data-index="6">
                 <h2>🔧 Was Sie mitbringen sollten</h2>
                 <div class="fragment">
@@ -569,6 +576,7 @@
                 </div>
             </div>
 
+            <!-- Slide 7: Fazit & Ausblick -->
             <div class="slide" data-index="7">
                 <h2>🎯 Fazit & Ausblick</h2>
                 <div class="fragment">
@@ -591,35 +599,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="slide-number" id="slideNumber">1 / 8</div>
         <div class="sync-hint">🔗 Synchronisiert</div>
         <div class="keyboard-hint">Drücke M für Moderator | ← → Navigation</div>
     </div>
 
     <script>
-        const SLIDE_NOTES = [
-            "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
-            "💡 **Vorteile betonen**: Zeitersparnis, niedrige Einstiegshürde, sofort sichtbare Ergebnisse. Beispiel: 'Stellen Sie sich vor, Sie beschreiben Ihre Website – und 5 Minuten später ist sie fertig!'",
-            "🔄 **Workflow demonstrieren**: Live zeigen, wie aus einer Idee Code wird. Schritt-für-Schritt: 1. Prompt formulieren, 2. KI generiert Code, 3. Ergebnis testen. Tipp: Einfache Beispiele wählen.",
-            "📌 **Workshop-Ablauf**: Live-Demo (gemeinsam), praktische Übung (Teilnehmer probieren selbst), Deployment (Website live schalten). Zeitmanagement: Ca. 10-15 Min. pro Phase.",
-            "⚠️ **Technische Voraussetzungen**: Laptop (Windows/Mac/Linux), GitHub-Account (kostenlos, vorher anlegen!). Tipp: GitHub Pages vorab aktivieren, falls Zeit knapp ist.",
-            "🌍 **Warum Mistral?**: Europäische Alternative (Frankreich), DSGVO-konform, offene Modelle, keine Abhängigkeit von US-Regulierungen. Vergleich: Open-Source vs. Closed-Source (z.B. OpenAI).",
-            "🔍 **Aktuelle Lage**: US-Regulierungen (z.B. Fable 5, Mythos 5) könnten Zugang zu KI-Modellen einschränken. Mistral als sichere Wahl für europäische Nutzer. Beispiel: Exportkontrollen, Datenschutzbedenken.",
-            "🎯 **Zusammenfassung & Ausblick**: KI als Werkzeug – nicht als Ersatz für Kreativität. Mistral + GitHub = perfekte Kombination für schnelle, datenschutzfreundliche Websites. Frage: Wer möchte es selbst ausprobieren?"
-        ];
-
-        const SLIDE_TITLES = [
-            "Titel: Interaktive Websites mit KI auf GitHub erstellen",
-            "Einführung: Warum KI für Webentwicklung?",
-            "Workflow: So funktioniert's im Workshop",
-            "Inhalt: Was Sie im Workshop erwartet",
-            "Voraussetzungen: Was Sie mitbringen sollten",
-            "Hintergrund: Warum wir Mistral nutzen",
-            "Kontext: US-Regulierungen & KI",
-            "Fazit & Ausblick: Nächste Schritte"
-        ];
-=======
         // ===== KONFIGURATION =====
         const SLIDE_NOTES = [
             "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
@@ -641,27 +627,6 @@
             "Kontext: US-Regulierungen & KI",
             "Voraussetzungen: Was Sie mitbringen sollten",
             "Fazit & Ausblick: Nächste Schritte"
-        ];=====
-        const SLIDE_NOTES = [
-            "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
-            "💡 **Vorteile betonen**: Zeitersparnis, niedrige Einstiegshürde, sofort sichtbare Ergebnisse. Beispiel: 'Stellen Sie sich vor, Sie beschreiben Ihre Website – und 5 Minuten später ist sie fertig!'",
-            "🔄 **Workflow demonstrieren**: Live zeigen, wie aus einer Idee Code wird. Schritt-für-Schritt: 1. Prompt formulieren, 2. KI generiert Code, 3. Ergebnis testen. Tipp: Einfache Beispiele wählen.",
-            "📌 **Workshop-Ablauf**: Live-Demo (gemeinsam), praktische Übung (Teilnehmer probieren selbst), Deployment (Website live schalten). Zeitmanagement: Ca. 10-15 Min. pro Phase.",
-            "⚠️ **Technische Voraussetzungen**: Laptop (Windows/Mac/Linux), GitHub-Account (kostenlos, vorher anlegen!). Tipp: GitHub Pages vorab aktivieren, falls Zeit knapp ist.",
-            "🌍 **Warum Mistral?**: Europäische Alternative (Frankreich), DSGVO-konform, offene Modelle, keine Abhängigkeit von US-Regulierungen. Vergleich: Open-Source vs. Closed-Source (z.B. OpenAI).",
-            "🔍 **Aktuelle Lage**: US-Regulierungen (z.B. Fable 5, Mythos 5) könnten Zugang zu KI-Modellen einschränken. Mistral als sichere Wahl für europäische Nutzer. Beispiel: Exportkontrollen, Datenschutzbedenken.",
-            "🎯 **Zusammenfassung & Ausblick**: KI als Werkzeug – nicht als Ersatz für Kreativität. Mistral + GitHub = perfekte Kombination für schnelle, datenschutzfreundliche Websites. Frage: Wer möchte es selbst ausprobieren?"
-        ];
-
-        const SLIDE_TITLES = [
-            "Titel: Interaktive Websites mit KI auf GitHub erstellen",
-            "Einführung: Warum KI für Webentwicklung?",
-            "Workflow: So funktioniert's im Workshop",
-            "Inhalt: Was Sie im Workshop erwartet",
-            "Voraussetzungen: Was Sie mitbringen sollten",
-            "Hintergrund: Warum wir Mistral nutzen",
-            "Kontext: US-Regulierungen & KI",
-            "Fazit & Ausblick: Nächste Schritte"
         ];
 
         // ===== VARIABLEN =====
@@ -675,6 +640,7 @@
 
         // ===== INITIALISIERUNG =====
         document.addEventListener('DOMContentLoaded', function() {
+            // Datum in der Präsentation anzeigen
             const now = new Date();
             const dateString = now.toLocaleDateString('de-DE', {
                 weekday: 'long',
@@ -684,6 +650,7 @@
             });
             document.getElementById('presentationDate').textContent = dateString;
 
+            // Uhrzeit aktualisieren
             function updateClock() {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('de-DE');
@@ -693,6 +660,7 @@
             updateClock();
             setInterval(updateClock, 1000);
 
+            // Zeit formatieren (HH:MM:SS)
             function formatTime(seconds) {
                 const hours = Math.floor(seconds / 3600);
                 const minutes = Math.floor((seconds % 3600) / 60);
@@ -700,6 +668,7 @@
                 return [hours, minutes, secs].map(x => x.toString().padStart(2, '0')).join(':');
             }
 
+            // Timer-Funktionen
             function startTotalTimer() {
                 if (totalTimerInterval) clearInterval(totalTimerInterval);
                 totalTimerInterval = setInterval(() => {
@@ -737,6 +706,7 @@
                 }
             }
 
+            // Prüfen, ob Moderatorenansicht aktiv ist
             const urlParams = new URLSearchParams(window.location.search);
             const isModerator = urlParams.get('moderator') === 'true';
 
@@ -746,13 +716,12 @@
                 initPresentation();
             }
 
+            // M-Taste für Moderatorenansicht (außer im Notizfeld)
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'm' || e.key === 'M') {
-                    // Prüfe, ob der Fokus im Notizfeld ist
                     const activeElement = document.activeElement;
                     if (activeElement && activeElement.id === 'moderatorNotes') {
-                        // Im Notizfeld: M-Taste nicht abfangen, damit man schreiben kann
-                        return;
+                        return; // Im Notizfeld: M-Taste nicht abfangen
                     }
                     e.preventDefault();
                     const currentUrl = window.location.href;
@@ -766,15 +735,18 @@
                 }
             });
 
+            // ===== PRÄSENTATIONS-MODUS =====
             function initPresentation() {
                 const slides = document.querySelectorAll('.slide');
                 const slideNumberEl = document.getElementById('slideNumber');
 
+                // Gespeicherte Slide laden
                 const savedIndex = localStorage.getItem(storageKey);
                 if (savedIndex) {
                     currentSlideIndex = parseInt(savedIndex);
                 }
 
+                // Slide anzeigen
                 function showSlide(index) {
                     slides.forEach(slide => slide.classList.remove('active'));
                     if (slides[index]) {
@@ -789,9 +761,9 @@
                     stopSlideTimer();
                     resetSlideTimer();
                     startSlideTimer();
-                    showFragments(index);
                 }
 
+                // Fragments schrittweise anzeigen
                 function showFragments(index) {
                     const slide = slides[index];
                     if (!slide) return;
@@ -804,6 +776,7 @@
                     });
                 }
 
+                // Navigation
                 function nextSlide() {
                     if (currentSlideIndex < totalSlides - 1) {
                         currentSlideIndex++;
@@ -828,6 +801,7 @@
                     showSlide(currentSlideIndex);
                 }
 
+                // Tastatur-Navigation
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'ArrowRight' || e.key === ' ') {
                         e.preventDefault();
@@ -844,6 +818,7 @@
                     }
                 });
 
+                // Touch-Navigation für Mobile
                 let touchStartX = 0;
                 let touchEndX = 0;
                 document.addEventListener('touchstart', function(e) {
@@ -859,10 +834,12 @@
                     }
                 }, false);
 
+                // Erste Slide anzeigen
                 showSlide(currentSlideIndex);
                 startTotalTimer();
                 startSlideTimer();
 
+                // Synchronisation mit anderen Tabs
                 window.addEventListener('storage', function(e) {
                     if (e.key === storageKey) {
                         const newIndex = parseInt(e.newValue);
@@ -874,6 +851,7 @@
                 });
             }
 
+            // ===== MODERATOREN-ANSICHT =====
             function showModeratorView() {
                 document.querySelector('.presentation-container').style.display = 'none';
                 document.getElementById('moderatorView').style.display = 'block';
@@ -888,6 +866,7 @@
                 if (totalSlidesEl) totalSlidesEl.textContent = totalSlides;
                 startTotalTimer();
 
+                // Moderatorenansicht aktualisieren
                 function updateModeratorView() {
                     const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
                     const notes = localStorage.getItem(storageKey + '-notes-' + slideIndex) || (SLIDE_NOTES[slideIndex] || '');
@@ -911,6 +890,7 @@
 
                 updateModeratorView();
 
+                // Synchronisation mit anderen Tabs
                 window.addEventListener('storage', function(e) {
                     if (e.key && e.key.startsWith(storageKey)) {
                         updateModeratorView();
@@ -927,6 +907,7 @@
                     }
                 });
 
+                // Notizen speichern
                 if (notesEl) {
                     notesEl.addEventListener('input', function() {
                         const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
@@ -935,6 +916,7 @@
                     });
                 }
 
+                // Button-Handler
                 function setupButton(id, callback) {
                     const btn = document.getElementById(id);
                     if (btn) btn.addEventListener('click', callback);
@@ -988,6 +970,7 @@
                 setupButton('resetTotalTimer', resetTotalTimer);
                 setupButton('resetSlideTimer', resetSlideTimer);
 
+                // Regelmäßig aktualisieren
                 setInterval(updateModeratorView, 5000);
             }
         });
