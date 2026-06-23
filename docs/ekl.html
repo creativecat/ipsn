@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Einkaufsliste</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a90e2;
+        }
+
+        header h1 {
+            color: #4a90e2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .add-product {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .add-product input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .add-product input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .add-product button {
+            padding: 12px 20px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-product button:hover {
+            background: #3a7bc8;
+        }
+
+        .shopping-list {
+            list-style: none;
+        }
+
+        .shopping-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: grab;
+        }
+
+        .shopping-item:hover {
+            background: #e9ecef;
+            border-color: #4a90e2;
+        }
+
+        .shopping-item.dragging {
+            opacity: 0.5;
+            background: #dee2e6;
+        }
+
+        .shopping-item .drag-handle {
+            cursor: grab;
+            padding: 5px 10px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .shopping-item .product-name {
+            flex: 1;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .shopping-item .product-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shopping-item .quantity-btn {
+            width: 25px;
+            height: 25px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .shopping-item .quantity-btn:hover {
+            background: #3a7bc8;
+        }
+
+        .shopping-item .quantity-value {
+            font-size: 1em;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .shopping-item .delete-btn {
+            background: #ff3547;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .shopping-item .delete-btn:hover {
+            background: #e02a37;
+        }
+
+        .list-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .list-actions button {
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+
+        .list-actions button:hover {
+            background: #5a6268;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .add-product {
+                flex-direction: column;
+            }
+
+            .add-product button {
+                width: 100%;
+            }
+
+            .shopping-item {
+                flex-wrap: wrap;
+            }
+
+            .shopping-item .product-name {
+                width: 100%;
+                order: 1;
+            }
+
+            .shopping-item .product-quantity {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .shopping-item .delete-btn {
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 Einkaufsliste</h1>
+            <p>Füge Produkte hinzu, bearbeite sie und sortiere sie nach Belieben</p>
+        </header>
+
+        <div class="add-product">
+            <input type="text" id="product-input" placeholder="Produktname eingeben..." onkeypress="handleKeyPress(event)">
+            <button onclick="addProduct()">Hinzufügen</button>
+        </div>
+
+        <ul class="shopping-list" id="shopping-list">
+            <li class="empty-message" id="empty-message">
+                Deine Einkaufsliste ist leer. Füge Produkte hinzu! 📝
+            </li>
+        </ul>
+
+        <div class="stats">
+            <span>Anzahl Produkte: <span id="product-count">0</span></span>
+            <span>Gesamtmenge: <span id="total-quantity">0</span></span>
+        </div>
+
+        <div class="list-actions">
+            <button onclick="clearList()">Liste leeren</button>
+            <button onclick="sortAlphabetically()">A-Z sortieren</button>
+            <button onclick="sortByQuantity()">Nach Menge sortieren</button>
+        </div>
+    </div>
+
+    <script>
+        let shoppingList = [];
+        let draggedItem = null;
+
+        const shoppingListElement = document.getElementById('shopping-list');
+        const productInput = document.getElementById('product-input');
+        const emptyMessage = document.getElementById('empty-message');
+        const productCountElement = document.getElementById('product-count');
+        const totalQuantityElement = document.getElementById('total-quantity');
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addProduct();
+            }
+        }
+
+        function addProduct() {
+            const productName = productInput.value.trim();
+            if (productName === '') return;
+
+            const newProduct = {
+                id: Date.now(),
+                name: productName,
+                quantity: 1
+            };
+
+            shoppingList.push(newProduct);
+            productInput.value = '';
+            renderList();
+        }
+
+        function removeProduct(id) {
+            shoppingList = shoppingList.filter(product => product.id !== id);
+            renderList();
+        }
+
+        function updateQuantity(id, change) {
+            const product = shoppingList.find(p => p.id === id);
+            if (product) {
+                product.quantity += change;
+                if (product.quantity <= 0) {
+                    removeProduct(id);
+                } else {
+                    renderList();
+                }
+            }
+        }
+
+        function clearList() {
+            if (confirm('Möchtest du wirklich alle Produkte aus der Liste entfernen?')) {
+                shoppingList = [];
+                renderList();
+            }
+        }
+
+        function sortAlphabetically() {
+            shoppingList.sort((a, b) => a.name.localeCompare(b.name));
+            renderList();
+        }
+
+        function sortByQuantity() {
+            shoppingList.sort((a, b) => b.quantity - a.quantity);
+            renderList();
+        }
+
+        function renderList() {
+            if (shoppingList.length === 0) {
+                shoppingListElement.innerHTML = '<li class="empty-message">Deine Einkaufsliste ist leer. Füge Produkte hinzu! 📝</li>';
+            } else {
+                shoppingListElement.innerHTML = '';
+                shoppingList.forEach((product, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'shopping-item';
+                    li.draggable = true;
+                    li.dataset.id = product.id;
+                    li.dataset.index = index;
+
+                    li.innerHTML = `
+                        <span class="drag-handle">⠿</span>
+                        <span class="product-name">${product.name}</span>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="updateQuantity(${product.id}, -1)">-</button>
+                            <span class="quantity-value">${product.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${product.id}, 1)">+</button>
+                        </div>
+                        <button class="delete-btn" onclick="removeProduct(${product.id})">Entfernen</button>
+                    `;
+
+                    li.addEventListener('dragstart', handleDragStart);
+                    li.addEventListener('dragover', handleDragOver);
+                    li.addEventListener('dragleave', handleDragLeave);
+                    li.addEventListener('drop', handleDrop);
+                    li.addEventListener('dragend', handleDragEnd);
+
+                    shoppingListElement.appendChild(li);
+                });
+            }
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const totalProducts = shoppingList.length;
+            const totalQuantity = shoppingList.reduce((sum, product) => sum + product.quantity, 0);
+
+            productCountElement.textContent = totalProducts;
+            totalQuantityElement.textContent = totalQuantity;
+        }
+
+        // Drag and Drop Funktionen
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+
+            if (draggedItem !== this) {
+                const fromIndex = parseInt(draggedItem.dataset.index);
+                const toIndex = parseInt(this.dataset.index);
+
+                const item = shoppingList.splice(fromIndex, 1)[0];
+                shoppingList.splice(toIndex, 0, item);
+
+                renderList();
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.shopping-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        // Initialisierung
+        renderList();
+    </script>
+</body>
+</html>
