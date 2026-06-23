@@ -686,6 +686,12 @@
 
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'm' || e.key === 'M') {
+                    // Prüfe, ob der Fokus im Notizfeld ist
+                    const activeElement = document.activeElement;
+                    if (activeElement && activeElement.id === 'moderatorNotes') {
+                        // Im Notizfeld: M-Taste nicht abfangen, damit man schreiben kann
+                        return;
+                    }
                     e.preventDefault();
                     const currentUrl = window.location.href;
                     const baseUrl = currentUrl.split('?')[0];
