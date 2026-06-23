@@ -748,20 +748,21 @@
 
                 // Slide anzeigen
                 function showSlide(index) {
-                    slides.forEach(slide => slide.classList.remove('active'));
-                    if (slides[index]) {
-                        slides[index].classList.add('active');
-                    }
-                    if (slideNumberEl) {
-                        slideNumberEl.textContent = (index + 1) + ' / ' + totalSlides;
-                    }
-                    localStorage.setItem(storageKey, index);
-                    localStorage.setItem(storageKey + '-timestamp', Date.now());
-                    localStorage.setItem(storageKey + '-title', SLIDE_TITLES[index] || '');
-                    stopSlideTimer();
-                    resetSlideTimer();
-                    startSlideTimer();
-                }
+    slides.forEach(slide => slide.classList.remove('active'));
+    if (slides[index]) {
+        slides[index].classList.add('active');
+    }
+    if (slideNumberEl) {
+        slideNumberEl.textContent = (index + 1) + ' / ' + totalSlides;
+    }
+    localStorage.setItem(storageKey, index);
+    localStorage.setItem(storageKey + '-timestamp', Date.now());
+    localStorage.setItem(storageKey + '-title', SLIDE_TITLES[index] || '');
+    stopSlideTimer();
+    resetSlideTimer();
+    startSlideTimer();
+    showFragments(index); // <-- Fehlender Aufruf hinzugefügt
+}
 
                 // Fragments schrittweise anzeigen
                 function showFragments(index) {
