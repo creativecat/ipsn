@@ -822,7 +822,7 @@
 
                 function updateModeratorView() {
                     const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                    const notes = localStorage.getItem(storageKey + '-notes') || (SLIDE_NOTES[slideIndex] || '');
+                    const notes = localStorage.getItem(storageKey + '-notes-' + slideIndex) || (SLIDE_NOTES[slideIndex] || '');
                     const title = localStorage.getItem(storageKey + '-title') || (SLIDE_TITLES[slideIndex] || '');
                     const timestamp = localStorage.getItem(storageKey + '-timestamp');
 
@@ -862,7 +862,7 @@
                 if (notesEl) {
                     notesEl.addEventListener('input', function() {
                         const slideIndex = parseInt(localStorage.getItem(storageKey)) || 0;
-                        localStorage.setItem(storageKey + '-notes', this.value);
+                        localStorage.setItem(storageKey + '-notes-' + slideIndex, this.value);
                         localStorage.setItem(storageKey + '-timestamp', Date.now());
                     });
                 }
