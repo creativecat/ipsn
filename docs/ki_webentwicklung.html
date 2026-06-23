@@ -511,25 +511,6 @@
             </div>
 
             <div class="slide" data-index="4">
-                <h2>🔧 Was Sie mitbringen sollten</h2>
-                <div class="fragment">
-                    <p style="font-size: 1.3em;">💻 <strong>Eigenen Laptop</strong></p>
-                    <p>Damit Sie direkt mitmachen können</p>
-                </div>
-                <div class="fragment">
-                    <p style="font-size: 1.3em; margin-top: 20px;">🌐 <strong>GitHub-Account</strong></p>
-                    <p>Kostenlos anlegbar unter <a href="https://github.com" style="color: #4fc3f7;">github.com</a></p>
-                </div>
-                <div class="fragment">
-                    <p style="font-size: 1.3em; margin-top: 20px;">💡 <strong>Ideen & Neugier</strong></p>
-                    <p>Was möchten Sie mit Ihrer Website erreichen?</p>
-                </div>
-                <div class="fragment" style="margin-top: 30px;">
-                    <img src="/assets/qrtoindex.png" alt="QR-Code" class="qrcode-image">
-                </div>
-            </div>
-
-            <div class="slide" data-index="5">
                 <h2>🌍 Warum wir Mistral nutzen</h2>
                 <div class="fragment">
                     <p style="font-size: 1.2em;"><strong>Europäische KI-Alternative</strong></p>
@@ -549,7 +530,7 @@
                 </div>
             </div>
 
-            <div class="slide" data-index="6">
+            <div class="slide" data-index="5">
                 <h2>🔍 Hintergrund: US-Regulierungen & KI</h2>
                 <div class="fragment">
                     <p style="font-size: 1.2em;"><strong>Aktuelle Entwicklungen:</strong></p>
@@ -566,6 +547,25 @@
                 <div class="fragment">
                     <p style="font-size: 1.2em; margin-top: 20px;"><strong>Unsere Lösung:</strong></p>
                     <p>Nutzung europäischer KI wie Mistral – unabhängig von US-Regulierungen</p>
+                </div>
+            </div>
+
+            <div class="slide" data-index="6">
+                <h2>🔧 Was Sie mitbringen sollten</h2>
+                <div class="fragment">
+                    <p style="font-size: 1.3em;">💻 <strong>Eigenen Laptop</strong></p>
+                    <p>Damit Sie direkt mitmachen können</p>
+                </div>
+                <div class="fragment">
+                    <p style="font-size: 1.3em; margin-top: 20px;">🌐 <strong>GitHub-Account</strong></p>
+                    <p>Kostenlos anlegbar unter <a href="https://github.com" style="color: #4fc3f7;">github.com</a></p>
+                </div>
+                <div class="fragment">
+                    <p style="font-size: 1.3em; margin-top: 20px;">💡 <strong>Ideen & Neugier</strong></p>
+                    <p>Was möchten Sie mit Ihrer Website erreichen?</p>
+                </div>
+                <div class="fragment" style="margin-top: 30px;">
+                    <img src="/assets/qrtoindex.png" alt="QR-Code" class="qrcode-image">
                 </div>
             </div>
 
@@ -598,7 +598,50 @@
     </div>
 
     <script>
+        const SLIDE_NOTES = [
+            "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
+            "💡 **Vorteile betonen**: Zeitersparnis, niedrige Einstiegshürde, sofort sichtbare Ergebnisse. Beispiel: 'Stellen Sie sich vor, Sie beschreiben Ihre Website – und 5 Minuten später ist sie fertig!'",
+            "🔄 **Workflow demonstrieren**: Live zeigen, wie aus einer Idee Code wird. Schritt-für-Schritt: 1. Prompt formulieren, 2. KI generiert Code, 3. Ergebnis testen. Tipp: Einfache Beispiele wählen.",
+            "📌 **Workshop-Ablauf**: Live-Demo (gemeinsam), praktische Übung (Teilnehmer probieren selbst), Deployment (Website live schalten). Zeitmanagement: Ca. 10-15 Min. pro Phase.",
+            "⚠️ **Technische Voraussetzungen**: Laptop (Windows/Mac/Linux), GitHub-Account (kostenlos, vorher anlegen!). Tipp: GitHub Pages vorab aktivieren, falls Zeit knapp ist.",
+            "🌍 **Warum Mistral?**: Europäische Alternative (Frankreich), DSGVO-konform, offene Modelle, keine Abhängigkeit von US-Regulierungen. Vergleich: Open-Source vs. Closed-Source (z.B. OpenAI).",
+            "🔍 **Aktuelle Lage**: US-Regulierungen (z.B. Fable 5, Mythos 5) könnten Zugang zu KI-Modellen einschränken. Mistral als sichere Wahl für europäische Nutzer. Beispiel: Exportkontrollen, Datenschutzbedenken.",
+            "🎯 **Zusammenfassung & Ausblick**: KI als Werkzeug – nicht als Ersatz für Kreativität. Mistral + GitHub = perfekte Kombination für schnelle, datenschutzfreundliche Websites. Frage: Wer möchte es selbst ausprobieren?"
+        ];
+
+        const SLIDE_TITLES = [
+            "Titel: Interaktive Websites mit KI auf GitHub erstellen",
+            "Einführung: Warum KI für Webentwicklung?",
+            "Workflow: So funktioniert's im Workshop",
+            "Inhalt: Was Sie im Workshop erwartet",
+            "Voraussetzungen: Was Sie mitbringen sollten",
+            "Hintergrund: Warum wir Mistral nutzen",
+            "Kontext: US-Regulierungen & KI",
+            "Fazit & Ausblick: Nächste Schritte"
+        ];
+=======
         // ===== KONFIGURATION =====
+        const SLIDE_NOTES = [
+            "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
+            "💡 **Vorteile betonen**: Zeitersparnis, niedrige Einstiegshürde, sofort sichtbare Ergebnisse. Beispiel: 'Stellen Sie sich vor, Sie beschreiben Ihre Website – und 5 Minuten später ist sie fertig!'",
+            "🔄 **Workflow demonstrieren**: Live zeigen, wie aus einer Idee Code wird. Schritt-für-Schritt: 1. Prompt formulieren, 2. KI generiert Code, 3. Ergebnis testen. Tipp: Einfache Beispiele wählen.",
+            "📌 **Workshop-Ablauf**: Live-Demo (gemeinsam), praktische Übung (Teilnehmer probieren selbst), Deployment (Website live schalten). Zeitmanagement: Ca. 10-15 Min. pro Phase.",
+            "🌍 **Warum Mistral?**: Europäische Alternative (Frankreich), DSGVO-konform, offene Modelle, keine Abhängigkeit von US-Regulierungen. Vergleich: Open-Source vs. Closed-Source (z.B. OpenAI).",
+            "🔍 **Aktuelle Lage**: US-Regulierungen (z.B. Fable 5, Mythos 5) könnten Zugang zu KI-Modellen einschränken. Mistral als sichere Wahl für europäische Nutzer. Beispiel: Exportkontrollen, Datenschutzbedenken.",
+            "⚠️ **Technische Voraussetzungen**: Laptop (Windows/Mac/Linux), GitHub-Account (kostenlos, vorher anlegen!). Tipp: GitHub Pages vorab aktivieren, falls Zeit knapp ist.",
+            "🎯 **Zusammenfassung & Ausblick**: KI als Werkzeug – nicht als Ersatz für Kreativität. Mistral + GitHub = perfekte Kombination für schnelle, datenschutzfreundliche Websites. Frage: Wer möchte es selbst ausprobieren?"
+        ];
+
+        const SLIDE_TITLES = [
+            "Titel: Interaktive Websites mit KI auf GitHub erstellen",
+            "Einführung: Warum KI für Webentwicklung?",
+            "Workflow: So funktioniert's im Workshop",
+            "Inhalt: Was Sie im Workshop erwartet",
+            "Hintergrund: Warum wir Mistral nutzen",
+            "Kontext: US-Regulierungen & KI",
+            "Voraussetzungen: Was Sie mitbringen sollten",
+            "Fazit & Ausblick: Nächste Schritte"
+        ];=====
         const SLIDE_NOTES = [
             "🎤 **Begrüßung**: Workshop vorstellen, Referent (Matthias Glienke) nennen. Ziel: Interaktive Websites mit KI erstellen. Frage: Wer hat schon mal mit KI gearbeitet?",
             "💡 **Vorteile betonen**: Zeitersparnis, niedrige Einstiegshürde, sofort sichtbare Ergebnisse. Beispiel: 'Stellen Sie sich vor, Sie beschreiben Ihre Website – und 5 Minuten später ist sie fertig!'",
