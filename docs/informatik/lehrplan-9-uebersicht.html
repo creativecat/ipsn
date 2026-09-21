@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lehrplan Informatik 9 – Gymnasium Bayern</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1e2430; color: #e8ecf1; display: flex; height: 100vh; overflow: hidden; }
+  nav { width: 280px; background: #151a24; border-right: 1px solid #2c3547; padding: 20px 0; overflow-y: auto; flex-shrink: 0; }
+  nav h1 { font-size: 1rem; padding: 0 20px 16px; color: #7aa2f7; border-bottom: 1px solid #2c3547; margin-bottom: 10px; }
+  nav a { display: block; padding: 9px 20px; color: #a9b1d6; text-decoration: none; font-size: .9rem; cursor: pointer; border-left: 3px solid transparent; }
+  nav a:hover { background: #1e2735; color: #e8ecf1; }
+  nav a.active { background: #232b3d; color: #fff; border-left-color: #7aa2f7; }
+  main { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .slide { display: none; max-width: 900px; padding: 40px; }
+  .slide.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .slide h2 { font-size: 2rem; color: #7aa2f7; margin-bottom: 24px; }
+  .slide h3 { font-size: 1.3rem; color: #9ece6a; margin: 18px 0 10px; }
+  .slide ul, .slide p { font-size: 1.2rem; line-height: 1.65; }
+  .slide ul { padding-left: 28px; }
+  .slide li { margin-bottom: 6px; }
+  .slide code { background: #2c3547; padding: 2px 7px; border-radius: 4px; font-size: 1.02rem; }
+  .slide pre { background: #11151d; border: 1px solid #2c3547; border-radius: 8px; padding: 18px; margin: 14px 0; overflow-x: auto; }
+  .slide pre code { background: none; padding: 0; }
+  .tag { display: inline-block; background: #2c3547; color: #7aa2f7; border-radius: 20px; padding: 4px 14px; font-size: .95rem; margin: 4px 6px 4px 0; }
+  footer { position: fixed; bottom: 14px; right: 20px; font-size: .85rem; color: #565f89; }
+  footer .keys { margin-right: 16px; }
+  kbd { background: #2c3547; border-radius: 4px; padding: 1px 7px; font-family: inherit; }
+  .backlink { position: absolute; top: 16px; right: 24px; font-size: .85rem; color: #565f89; text-decoration: none; }
+  .backlink:hover { color: #7aa2f7; }
+</style>
+</head>
+<body>
+<nav id="nav">
+  <h1>Lehrplan Informatik 9<br>Gymnasium Bayern</h1>
+  <a data-slide="0">Überblick</a>
+  <a data-slide="1">1 · Objektorientierte Programmierung</a>
+  <a data-slide="2">1 · OOP: Vererbung &amp; Polymorphismus</a>
+  <a data-slide="3">2 · Rekursion</a>
+  <a data-slide="4">3 · Einfach verkettete Listen</a>
+  <a data-slide="5">4 · Graphen</a>
+  <a data-slide="6">5 · Informationssicherheit &amp; Datenschutz</a>
+  <a data-slide="7">6 · Softwareentwicklung</a>
+  <a data-slide="8">Zusammenfassung</a>
+</nav>
+<main>
+<a class="backlink" href="index.html">← zur Übersicht</a>
+<section class="slide">
+  <h2>Überblick: Informatik in der 9. Klasse</h2>
+  <p>Gymnasium Bayern (LehrplanPLUS) – die sechs Lernbereiche des Jahres:</p>
+  <p style="margin-top:20px">
+    <span class="tag">1 · Objektorientierte Programmierung</span>
+    <span class="tag">2 · Rekursion</span>
+    <span class="tag">3 · Verkettete Listen</span>
+    <span class="tag">4 · Graphen</span>
+    <span class="tag">5 · Informationssicherheit &amp; Datenschutz</span>
+    <span class="tag">6 · Softwareentwicklung</span>
+  </p>
+  <p style="margin-top:24px; color:#a9b1d6">Hinweis: Diese Übersicht basiert auf dem LehrplanPLUS Informatik, Jahrgangsstufe 9, Gymnasium Bayern.</p>
+</section>
+<section class="slide">
+  <h2>1 · Objektorientierte Programmierung</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Objekte nach <b>Attributen und Methoden</b> analysieren, zu <b>Klassen</b> abstrahieren und grafisch darstellen</li>
+    <li>Klassen, Attribute und Methoden in einer OOP-Sprache deklarieren</li>
+    <li>Methoden auf Grundlage gegebener oder selbst entwickelter Algorithmen implementieren</li>
+    <li>Beziehungen zwischen Objekten modellieren (z. B. Mitgliederverwaltung eines Vereins) und durch <b>Referenzen</b> umsetzen</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Objekt, Klasse, Attribut, Attributwert, Methode</li>
+    <li>Variablenarten: Parameter, lokale Variable, Attribut</li>
+    <li>Methodenkopf/-rumpf, Übergabe- und Rückgabewert, <b>Konstruktor</b>, getter/setter</li>
+    <li>Kommunikation zwischen Objekten, <b>Datenkapselung</b>, Sequenzdiagramm</li>
+    <li>Array/Feld: Index, Element, Länge</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>1 · OOP: Vererbung &amp; Polymorphismus</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li><b>Generalisierungshierarchien</b> durch Klassendiagramme modellieren</li>
+    <li>Vererbung anwenden, Methoden überschreiben, <b>Polymorphismus</b> erläutern</li>
+    <li>Beispiel: spartenabhängige Berechnung von Mitgliedsbeiträgen eines Sportvereins</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Ober- und Unterklasse</li>
+    <li>Vererbung von Attributen und Methoden an Unterklassen</li>
+    <li>Überschreiben von Methoden</li>
+    <li>Polymorphismus</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>2 · Rekursion</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Rekursive Algorithmen analysieren, das Prinzip der Rekursion erläutern</li>
+    <li>Iterative und rekursive Algorithmen vergleichen</li>
+    <li>Rekursive Algorithmen implementieren, z. B. <b>ggT</b>, selbstähnliche Figuren, <b>Türme von Hanoi</b></li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Rekursiver Aufruf</li>
+    <li><b>Abbruchbedingung</b></li>
+    <li>Lineare und verzweigte Rekursion</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>3 · Einfach verkettete Listen</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Lineare Datenstrukturen aus dem Lebensumfeld (z. B. <b>Playlist</b>) mit verketteten Listen modellieren</li>
+    <li>Algorithmen zum Einfügen, Löschen und Durchlaufen entwickeln – dabei Rekursion nutzen</li>
+    <li>Listen und Algorithmen objektorientiert implementieren</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Einfach verkettete Liste als <b>rekursive Struktur</b></li>
+    <li>Methoden zum Einfügen, Entfernen, Suchen, Länge bestimmen</li>
+    <li><b>Trennung von Struktur und Daten</b></li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>4 · Graphen</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Vernetzte Strukturen als <b>Graphen</b> modellieren und klassifizieren</li>
+    <li>Graph mit <b>Adjazenzmatrix</b> implementieren</li>
+    <li><b>Tiefensuche</b> erläutern, implementieren und modifizieren</li>
+    <li><b>Dijkstra-Algorithmus</b> analysieren und seine Alltagsrelevanz erläutern</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Knoten, Kanten, Pfad, Erreichbarkeit, Zyklus</li>
+    <li>Eigenschaften: gerichtet, zusammenhängend, gewichtet, zyklenfrei</li>
+    <li>Adjazenzmatrix</li>
+    <li>Tiefensuche, Dijkstra-Algorithmus</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>5 · Informationssicherheit &amp; Datenschutz</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Datenschutzregelungen im Spannungsfeld zwischen Persönlichkeitsrechten und öffentlichen Interessen bewerten</li>
+    <li>Informatiksysteme (z. B. Smartphone-App, Smarthome) hinsichtlich der <b>Schutzziele</b> analysieren</li>
+    <li>Gefährdungen und Schutzmaßnahmen erläutern</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Datenschutzgesetze: Zweck, Grundsätze (Verbotsprinzip mit Erlaubnisvorbehalt), Rechte Betroffener</li>
+    <li>Schutzziele: <b>Vertraulichkeit, Integrität, Verfügbarkeit, Authentizität</b></li>
+    <li>Gefährdungen: höhere Gewalt, organisatorische Mängel, Fehlhandlungen, technisches Versagen, vorsätzliche Handlungen (Schadprogramme, DDoS)</li>
+    <li>Maßnahmen: organisatorisch, technisch (Firewall, Verschlüsselung, Sandbox), physisch</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>6 · Softwareentwicklung</h2>
+  <h3>Kompetenzerwartungen</h3>
+  <ul>
+    <li>Klassen aus einer <b>Programmbibliothek</b> nutzen, z. B. für grafische Oberflächen</li>
+    <li><b>Wasserfallmodell</b> mit <b>agiler Softwareentwicklung</b> vergleichen</li>
+    <li>Ein Softwareprojekt aus der Praxis (z. B. Mitgliederverwaltung, einfaches Spiel) im Team eigenverantwortlich durchführen</li>
+  </ul>
+  <h3>Inhalte</h3>
+  <ul>
+    <li>Bibliotheksklassen: Listen, GUI-Elemente, Taktgeber, persistente Datenspeicherung</li>
+    <li>Projektplanung: Zielsetzung, Arbeitsteilung, Schnittstellen, Meilensteine</li>
+    <li>Wasserfall: Analyse → Entwurf → Implementierung → Test → Abnahme → Betrieb/Wartung</li>
+    <li>Agil: agiles Manifest, User Stories, Sprints, Retrospektive</li>
+    <li>Testen: manuell, automatisiert, Debuggen</li>
+  </ul>
+</section>
+<section class="slide">
+  <h2>Zusammenfassung</h2>
+  <ul>
+    <li><b>OOP:</b> Klassen, Objekte, Referenzen, Vererbung, Polymorphismus</li>
+    <li><b>Rekursion:</b> Abbruchbedingung, lineare/verzweigte Rekursion</li>
+    <li><b>Listen:</b> rekursive Datenstruktur, Trennung von Struktur und Daten</li>
+    <li><b>Graphen:</b> Adjazenzmatrix, Tiefensuche, Dijkstra</li>
+    <li><b>Sicherheit:</b> Schutzziele, Datenschutz, Gefährdungen, Maßnahmen</li>
+    <li><b>Softwareentwicklung:</b> Wasserfall vs. agil, Teamprojekt</li>
+  </ul>
+  <p style="margin-top:24px; color:#a9b1d6">Quelle: LehrplanPLUS Bayern, Informatik, Jahrgangsstufe 9, Gymnasium (lehrplanplus.bayern.de)</p>
+</section>
+</main>
+<footer><span class="keys"><kbd>←</kbd> <kbd>→</kbd> navigieren</span><span id="counter"></span></footer>
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const links = document.querySelectorAll('#nav a');
+  let idx = 0;
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, n) => s.classList.toggle('active', n === idx));
+    links.forEach((l, n) => l.classList.toggle('active', n === idx));
+    document.getElementById('counter').textContent = (idx + 1) + ' / ' + slides.length;
+  }
+  links.forEach(l => l.addEventListener('click', () => show(+l.dataset.slide)));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') show(idx + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  show(0);
+</script>
+</body>
+</html>
